@@ -16,35 +16,65 @@ struct Point {
 	double64 y;
 };
 
-const int32 MAX_N = 10000;
+long double func(Point p1, Point p2, Point a) {
+	return (a.y - p1.y) * (p2.x - p1.x) - (p2.y - p1.y) * (a.x - p1.x);
+}
 
-Point points[MAX_N];
+bool isOnSameDirection(Point p1, Point p2, Point a, Point b) {
+	return func(p1, p2, a) * func(p1, p2, b) >= 0;
+}
+
+bool check(Point* triangle, Point apple) {
+	Point p1 = triangle[0];
+	Point p2 = triangle[1];
+	Point p3 = triangle[2];
+
+	if (!isOnSameDirection(p1, p2, p3, apple)) return false;
+	if (!isOnSameDirection(p2, p3, p1, apple)) return false;
+	if (!isOnSameDirection(p3, p1, p2, apple)) return false;
+
+	return true;
+}
 
 int main() {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
 	cout.tie(NULL);
 
-	int32 N;
-	cin >> N;	
+	Point triangle[3];
 
-	for (int32 i = 0; i < N; i++) {
-		cin >> points[i].x >> points[i].y;
+	for (int i = 0; i < 3; i++) {
+		cin >> triangle[i].x >> triangle[i].y;
 	}
 
-	double64 ret = 0.0;
-	int32 j = N - 1;
+	double64 area = 0.0;
+	int32 j = 2;
 
-	for (int i = 0; i < N; i++) {
-		ret += (points[j].x + points[i].x) * (points[j].y - points[i].y);
+	for (int32 i = 0; i < 3; i++) {
+		area += (triangle[i].x + triangle[j].x) * (triangle[i].y - triangle[j].y);
 		j = i;
 	}
 
-	ret /= 2.0;
-	ret = abs(ret);
+	area = abs(area) / 2.0;
+
+	int32 N;
+	cin >> N;
+
+	int32 ret = 0;
+
+	for (int32 i = 0; i < N; i++) {
+		Point apple;
+		cin >> apple.x >> apple.y;
+
+		if (check(triangle, apple)) {
+			ret++;
+		}
+	}
 
 	cout << fixed;
 	cout.precision(1);
+	cout << area << "\n";
+	cout.precision(0);
 	cout << ret;
 
 	return 0;
