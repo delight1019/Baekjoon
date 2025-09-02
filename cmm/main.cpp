@@ -9,31 +9,40 @@ typedef signed int int32;
 typedef unsigned int uint32;
 typedef long long int64;
 typedef unsigned long long uint64;
-typedef long double double64;
 
-struct Point {
-	double64 x;
-	double64 y;
-};
+const int32 MAX_N = 8;
 
-long double func(Point p1, Point p2, Point a) {
-	return (a.y - p1.y) * (p2.x - p1.x) - (p2.y - p1.y) * (a.x - p1.x);
-}
+int32 Arr[MAX_N];
+int32 CopiedArr[MAX_N];
 
-bool isOnSameDirection(Point p1, Point p2, Point a, Point b) {
-	return func(p1, p2, a) * func(p1, p2, b) >= 0;
-}
+void mergeSort(int32 s, int32 e, int32* arr, int32* copiedArr) {
+	if (e - s == 1) return;
 
-bool check(Point* triangle, Point apple) {
-	Point p1 = triangle[0];
-	Point p2 = triangle[1];
-	Point p3 = triangle[2];
+	int32 mid = s + (e - s) / 2.0;
+	mergeSort(s, mid, arr, copiedArr);
+	mergeSort(mid, e, arr, copiedArr);
 
-	if (!isOnSameDirection(p1, p2, p3, apple)) return false;
-	if (!isOnSameDirection(p2, p3, p1, apple)) return false;
-	if (!isOnSameDirection(p3, p1, p2, apple)) return false;
+	for (int32 i = s; i < e; i++) {
+		copiedArr[i] = arr[i];
+	}
 
-	return true;
+	int32 left = s;
+	int32 right = mid;
+
+	for (int32 i = s; i < e; i++) {
+		if (right == e) {
+			arr[i] = copiedArr[left++];
+		}
+		else if (left == mid) {
+			arr[i] = copiedArr[right++];
+		}
+		else if (copiedArr[left] < copiedArr[right]) {
+			arr[i] = copiedArr[left++];
+		}
+		else {
+			arr[i] = copiedArr[right++];
+		}
+	}
 }
 
 int main() {
@@ -41,41 +50,51 @@ int main() {
 	cin.tie(NULL);
 	cout.tie(NULL);
 
-	Point triangle[3];
+	int32 N, M;
+	cin >> N >> M;
 
-	for (int i = 0; i < 3; i++) {
-		cin >> triangle[i].x >> triangle[i].y;
+	for (int i = 0; i < N; i++) {
+		cin >> Arr[i];
 	}
 
-	double64 area = 0.0;
-	int32 j = 2;
+	mergeSort(0, N, Arr, CopiedArr);
 
-	for (int32 i = 0; i < 3; i++) {
-		area += (triangle[i].x + triangle[j].x) * (triangle[i].y - triangle[j].y);
-		j = i;
+	int32* indexArr = new int32[M];
+
+	for (int i = 0; i < M; i++) {
+		indexArr[i] = i;
 	}
 
-	area = abs(area) / 2.0;
+	bool isDone = false;
 
-	int32 N;
-	cin >> N;
-
-	int32 ret = 0;
-
-	for (int32 i = 0; i < N; i++) {
-		Point apple;
-		cin >> apple.x >> apple.y;
-
-		if (check(triangle, apple)) {
-			ret++;
+	while (!isDone) {
+		for (int i = 0; i < M; i++) {
+			cout << Arr[indexArr[i]] << " ";
 		}
-	}
+		cout << "\n";
 
-	cout << fixed;
-	cout.precision(1);
-	cout << area << "\n";
-	cout.precision(0);
-	cout << ret;
+		int32 m = M - 1;
+
+		while (true) {
+			if (m < 0) {
+				isDone = true;
+				break;
+			}
+
+			indexArr[m]++;
+
+			if (indexArr[m] == (N + m - (M - 1))) {
+				m--;
+				continue;
+			}
+			else {
+				for (int32 i = m + 1; i < M; i++) {
+					indexArr[i] = indexArr[i - 1] + 1;
+				}
+				break;
+			}
+		}		
+	}
 
 	return 0;
 }
