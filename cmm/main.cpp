@@ -9,18 +9,18 @@ typedef unsigned int uint32;
 typedef long long int64;
 typedef unsigned long long uint64;
 
-const int32 MAX_N = 100000;
+const int32 MAX_N = 4000;
 
-struct Player {
-	int32 index;
-	int32 value;
-};
+int64 A[MAX_N];
+int64 B[MAX_N];
+int64 C[MAX_N];
+int64 D[MAX_N];
 
-int32 scores[MAX_N] = { 0, };
-Player players[MAX_N];
-Player copied[MAX_N];
+int64 AB[MAX_N * MAX_N];
+int64 CD[MAX_N * MAX_N];
+int64 copied[MAX_N * MAX_N];
 
-void mergeSort(int32 s, int32 e, Player* arr, Player* copied) {
+void mergeSort(int32 s, int32 e, int64* arr, int64* copied) {
 	if (e - s == 1) return;
 
 	int32 mid = s + (e - s) / 2;
@@ -41,7 +41,7 @@ void mergeSort(int32 s, int32 e, Player* arr, Player* copied) {
 		else if (right == e) {
 			arr[i] = copied[left++];
 		}
-		else if (copied[left].value < copied[right].value) {
+		else if (copied[left] < copied[right]) {
 			arr[i] = copied[left++];
 		}
 		else {
@@ -50,21 +50,34 @@ void mergeSort(int32 s, int32 e, Player* arr, Player* copied) {
 	}
 }
 
-int32 binarySearch(int32 s, int32 e, int32 value) {
-	while (s <= e) {
+int32 lowerBound(int32 s, int32 e, int64 value) {
+	while (s + 1 < e) {
 		int32 mid = s + (e - s) / 2;
 
-		if (players[mid].value == value) return mid;
-
-		if (players[mid].value < value) {
-			s = mid + 1;
+		if (CD[mid] + value < 0) {
+			s = mid;
 		}
 		else {
-			e = mid - 1;
+			e = mid;
 		}
 	}
 
-	return -1;
+	return e;
+}
+
+int32 upperBound(int32 s, int32 e, int64 value) {
+	while (s + 1 < e) {
+		int32 mid = s + (e - s) / 2;
+
+		if (CD[mid] + value <= 0) {
+			s = mid;
+		}
+		else {
+			e = mid;
+		}
+	}
+
+	return e;
 }
 
 int main() {
@@ -72,35 +85,38 @@ int main() {
 	cin.tie(NULL);
 	cout.tie(NULL);
 
-	int32 N;
-	cin >> N;
+	int32 n;
+	cin >> n;
 
-	for (int32 i = 0; i < N; i++) {
-		cin >> players[i].value;
-		players[i].index = i;
+	for (int32 i = 0; i < n; i++) {
+		cin >> A[i] >> B[i] >> C[i] >> D[i];
 	}
 
-	mergeSort(0, N, players, copied);
-	int32 maxValue = players[N - 1].value;
+	int32 index = 0;
 
-	for (int32 i = 0; i < N; i++) {
-		int32 c = 2;
-
-		while (players[i].value * c <= maxValue) {
-			int32 ret = binarySearch(i + 1, N - 1, c * players[i].value);
-
-			if (ret != -1) {
-				scores[players[i].index]++;
-				scores[players[ret].index]--;
-			}
-			
-			c++;
+	for (int32 i = 0; i < n; i++) {
+		for (int32 j = 0; j < n; j++) {
+			AB[index] = A[i] + B[j];
+			CD[index++] = C[i] + D[j];
 		}
 	}
 
-	for (int32 i = 0; i < N; i++) {
-		cout << scores[i] << " ";
+	mergeSort(0, index, AB, copied);
+	mergeSort(0, index, CD, copied);
+
+	int64 ret = 0;
+
+	for (int32 i = 0; i < index; i++) {
+		if (AB[i] + CD[0] > 0) continue;
+		if (AB[i] + CD[index - 1] < 0) continue;
+
+		int64 lower = (AB[i] + CD[0] == 0) ? 0 : lowerBound(0, index - 1, AB[i]);
+		int64 upper = (AB[i] + CD[index - 1] == 0) ? index : upperBound(0, index - 1, AB[i]);
+
+		ret += (upper - lower);
 	}
+
+	cout << ret;
 
 	return 0;
 }
