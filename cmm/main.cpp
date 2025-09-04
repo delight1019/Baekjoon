@@ -9,20 +9,26 @@ typedef unsigned int uint32;
 typedef long long int64;
 typedef unsigned long long uint64;
 
-const int32 MAX_N = 5000;
+const int32 MAX_N = 100000;
 
-int64 liquids[MAX_N];
-int64 copied[MAX_N];
+struct Player {
+	int32 index;
+	int32 value;
+};
 
-void mergeSort(int32 s, int32 e, int64* arr, int64* copiedArr) {
+int32 scores[MAX_N] = { 0, };
+Player players[MAX_N];
+Player copied[MAX_N];
+
+void mergeSort(int32 s, int32 e, Player* arr, Player* copied) {
 	if (e - s == 1) return;
 
 	int32 mid = s + (e - s) / 2;
-	mergeSort(s, mid, arr, copiedArr);
-	mergeSort(mid, e, arr, copiedArr);
+	mergeSort(s, mid, arr, copied);
+	mergeSort(mid, e, arr, copied);
 
 	for (int32 i = s; i < e; i++) {
-		copiedArr[i] = arr[i];
+		copied[i] = arr[i];
 	}
 
 	int32 left = s;
@@ -30,63 +36,31 @@ void mergeSort(int32 s, int32 e, int64* arr, int64* copiedArr) {
 
 	for (int32 i = s; i < e; i++) {
 		if (left == mid) {
-			arr[i] = copiedArr[right++];
+			arr[i] = copied[right++];
 		}
 		else if (right == e) {
-			arr[i] = copiedArr[left++];
+			arr[i] = copied[left++];
 		}
-		else if (copiedArr[left] < copiedArr[right]) {
-			arr[i] = copiedArr[left++];
+		else if (copied[left].value < copied[right].value) {
+			arr[i] = copied[left++];
 		}
 		else {
-			arr[i] = copiedArr[right++];
+			arr[i] = copied[right++];
 		}
 	}
 }
 
-int64 getABS(int64 value) {
-	return value > 0 ? value : -value;
-}
-
-int32 binarySearch(int32 s, int32 e, int64 curValue) {
+int32 binarySearch(int32 s, int32 e, int32 value) {
 	while (s <= e) {
 		int32 mid = s + (e - s) / 2;
 
-		if (liquids[mid] + curValue == 0) return mid;
+		if (players[mid].value == value) return mid;
 
-		if (liquids[mid] + curValue < 0) {
-			int64 curRet = getABS(liquids[mid] + curValue);
-
-			if (mid + 1 <= e) {
-				int64 nextRet = getABS(liquids[mid + 1] + curValue);
-
-				if (nextRet < curRet) {
-					s = mid + 1;
-				}
-				else {
-					return mid;
-				}
-			}
-			else {
-				return mid;
-			}
+		if (players[mid].value < value) {
+			s = mid + 1;
 		}
 		else {
-			int64 curRet = getABS(liquids[mid] + curValue);
-
-			if (mid - 1 >= s) {
-				int64 nextRet = getABS(liquids[mid - 1] + curValue);
-
-				if (nextRet < curRet) {
-					e = mid - 1;
-				}
-				else {
-					return mid;
-				}
-			}
-			else {
-				return mid;
-			}
+			e = mid - 1;
 		}
 	}
 
@@ -102,32 +76,31 @@ int main() {
 	cin >> N;
 
 	for (int32 i = 0; i < N; i++) {
-		cin >> liquids[i];
+		cin >> players[i].value;
+		players[i].index = i;
 	}
 
-	mergeSort(0, N, liquids, copied);
-
-	int64 ret = 5000000000;
-	int64 ret1, ret2, ret3;
+	mergeSort(0, N, players, copied);
+	int32 maxValue = players[N - 1].value;
 
 	for (int32 i = 0; i < N; i++) {
-		for (int32 j = N - 1; j > i; j--) {
-			int32 temp = binarySearch(i + 1, j - 1, liquids[i] + liquids[j]);
+		int32 c = 2;
 
-			if (temp == -1) continue;
+		while (players[i].value * c <= maxValue) {
+			int32 ret = binarySearch(i + 1, N - 1, c * players[i].value);
 
-			int64 cur = getABS(liquids[i] + liquids[j] + liquids[temp]);
-
-			if (cur < ret) {
-				ret1 = i;
-				ret2 = temp;
-				ret3 = j;
-				ret = cur;
+			if (ret != -1) {
+				scores[players[i].index]++;
+				scores[players[ret].index]--;
 			}
+			
+			c++;
 		}
 	}
 
-	cout << liquids[ret1] << " " << liquids[ret2] << " " << liquids[ret3];
+	for (int32 i = 0; i < N; i++) {
+		cout << scores[i] << " ";
+	}
 
 	return 0;
 }
