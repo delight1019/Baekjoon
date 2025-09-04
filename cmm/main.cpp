@@ -1,7 +1,6 @@
 #pragma disable(4996)
 
 #include <iostream>
-#include <cmath>
 
 using namespace std;
 
@@ -10,159 +9,125 @@ typedef unsigned int uint32;
 typedef long long int64;
 typedef unsigned long long uint64;
 
-const int32 MAX_N = 50;
-const int32 deltaR[4] = { 0, 0, 1, -1 };
-const int32 deltaC[4] = { 1, -1, 0, 0 };
+const int32 MAX_N = 5000;
 
-int32 map[MAX_N][MAX_N];
-bool isVisited[MAX_N][MAX_N];
+int64 liquids[MAX_N];
+int64 copied[MAX_N];
 
-struct Point {
-	int32 r;
-	int32 c;
-};
+void mergeSort(int32 s, int32 e, int64* arr, int64* copiedArr) {
+	if (e - s == 1) return;
 
-class MyQueue {
-private:
-	int32 maxN;
-	Point* values;
-	int32 count;
-	int32 s, e;
-public:
-	MyQueue(int32 maxN) {
-		this->maxN = maxN;
-		this->values = new Point[maxN];
-		this->count = 0;
-		this->s = 0;
-		this->e = 0;
-	}
-public:
-	void Push(Point value) {
-		values[e] = value;
-		e++;
-		count++;
+	int32 mid = s + (e - s) / 2;
+	mergeSort(s, mid, arr, copiedArr);
+	mergeSort(mid, e, arr, copiedArr);
+
+	for (int32 i = s; i < e; i++) {
+		copiedArr[i] = arr[i];
 	}
 
-	Point Pop() {
-		Point ret = values[s];
-		s++;
-		count--;
-		return ret;
-	}
+	int32 left = s;
+	int32 right = mid;
 
-	bool IsEmpty() {
-		return count == 0;
-	}
-
-	void Clear() {
-		count = 0;
-		s = 0;
-		e = 0;
-	}
-
-	int32 GetPopulation() {
-		int32 sum = 0;
-
-		for (int32 i = 0; i < e; i++) {
-			Point cur = values[i];
-			sum += map[cur.r][cur.c];
+	for (int32 i = s; i < e; i++) {
+		if (left == mid) {
+			arr[i] = copiedArr[right++];
 		}
-
-		return sum / e;
-	}
-
-	void SetPopulation() {
-		int32 population = GetPopulation();
-
-		for (int32 i = 0; i < e; i++) {
-			Point cur = values[i];
-			map[cur.r][cur.c] = population;
+		else if (right == e) {
+			arr[i] = copiedArr[left++];
+		}
+		else if (copiedArr[left] < copiedArr[right]) {
+			arr[i] = copiedArr[left++];
+		}
+		else {
+			arr[i] = copiedArr[right++];
 		}
 	}
+}
 
-	int32 Count() {
-		return count;
+int64 getABS(int64 value) {
+	return value > 0 ? value : -value;
+}
+
+int32 binarySearch(int32 s, int32 e, int64 curValue) {
+	while (s <= e) {
+		int32 mid = s + (e - s) / 2;
+
+		if (liquids[mid] + curValue == 0) return mid;
+
+		if (liquids[mid] + curValue < 0) {
+			int64 curRet = getABS(liquids[mid] + curValue);
+
+			if (mid + 1 <= e) {
+				int64 nextRet = getABS(liquids[mid + 1] + curValue);
+
+				if (nextRet < curRet) {
+					s = mid + 1;
+				}
+				else {
+					return mid;
+				}
+			}
+			else {
+				return mid;
+			}
+		}
+		else {
+			int64 curRet = getABS(liquids[mid] + curValue);
+
+			if (mid - 1 >= s) {
+				int64 nextRet = getABS(liquids[mid - 1] + curValue);
+
+				if (nextRet < curRet) {
+					e = mid - 1;
+				}
+				else {
+					return mid;
+				}
+			}
+			else {
+				return mid;
+			}
+		}
 	}
-};
+
+	return -1;
+}
 
 int main() {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
 	cout.tie(NULL);
 
-	int32 N, L, R;
-	cin >> N >> L >> R;
+	int32 N;
+	cin >> N;
 
-	for (int i = 0; i < N; i++) {
-		for (int j = 0; j < N; j++) {
-			cin >> map[i][j];
+	for (int32 i = 0; i < N; i++) {
+		cin >> liquids[i];
+	}
+
+	mergeSort(0, N, liquids, copied);
+
+	int64 ret = 5000000000;
+	int64 ret1, ret2, ret3;
+
+	for (int32 i = 0; i < N; i++) {
+		for (int32 j = N - 1; j > i; j--) {
+			int32 temp = binarySearch(i + 1, j - 1, liquids[i] + liquids[j]);
+
+			if (temp == -1) continue;
+
+			int64 cur = getABS(liquids[i] + liquids[j] + liquids[temp]);
+
+			if (cur < ret) {
+				ret1 = i;
+				ret2 = temp;
+				ret3 = j;
+				ret = cur;
+			}
 		}
 	}
 
-	int32 ret = 0;
-	MyQueue* queue = new MyQueue(MAX_N * MAX_N);
-	MyQueue* unions = new MyQueue(MAX_N * MAX_N);
-
-	while (true) {		
-		queue->Clear();		
-
-		bool isDone = false;
-
-		for (int i = 0; i < N; i++) {
-			for (int j = 0; j < N; j++) {
-				isVisited[i][j] = false;
-			}
-		}
-
-		for (int i = 0; i < N; i++) {
-			for (int j = 0; j < N; j++) {
-				if (isVisited[i][j]) continue;
-
-				Point start;
-				start.r = i;
-				start.c = j;
-				isVisited[start.r][start.c] = true;
-				queue->Push(start);
-
-				unions->Clear();
-
-				while (!queue->IsEmpty()) {
-					Point cur = queue->Pop();
-					unions->Push(cur);
-
-					Point next;
-
-					for (int k = 0; k < 4; k++) {
-						next.r = cur.r + deltaR[k];
-						next.c = cur.c + deltaC[k];
-
-						if (next.r < 0 || next.r >= N || next.c < 0 || next.c >= N) continue;
-						if (isVisited[next.r][next.c]) continue;
-
-						int32 popDelta = abs(map[cur.r][cur.c] - map[next.r][next.c]);
-						if (popDelta < L || popDelta > R) continue;
-
-						isVisited[next.r][next.c] = true;
-						queue->Push(next);
-					}
-				}
-
-				if (unions->Count() > 1) {
-					unions->SetPopulation();
-					isDone = true;
-				}				
-			}
-		}
-
-		if (isDone) {
-			ret++;
-		}
-		else {
-			break;
-		}
-	}
-
-	cout << ret;
+	cout << liquids[ret1] << " " << liquids[ret2] << " " << liquids[ret3];
 
 	return 0;
 }
