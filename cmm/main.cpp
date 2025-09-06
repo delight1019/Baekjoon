@@ -1,6 +1,7 @@
 #pragma disable(4996)
 
 #include <iostream>
+#include <cstring>
 
 using namespace std;
 
@@ -9,19 +10,34 @@ typedef unsigned int uint32;
 typedef long long int64;
 typedef unsigned long long uint64;
 
-int64 map[101][10][1024]; // 방문한 자리수, 현재 선택한 숫자, 지금까지 거쳐온 숫자
+const int32 MAX_N = 16;
+const int32 max_k = (1 << 16) - 1;
+const int32 MAX_VALUE = 1000000000;
 
-const int64 MOD = 1000000000;
+int64 W[MAX_N + 1][MAX_N + 1];
+int64 cache[MAX_N][max_k];
 
-int64 solve(int n) {
-	int64 ret = 0;
+int64 Min(int64 a, int64 b) {
+	return a < b ? a : b;
+}
 
-	for (int i = 0; i < 10; i++) {
-		ret += map[n][i][1023];
-		ret %= MOD;
+int64 DFS(int32 curNode, int32 visited, int32 N, int32 completed) {
+	if (visited == completed) {
+		if (W[curNode][0] == 0) return MAX_VALUE;
+		return W[curNode][0];
 	}
 
-	return ret;
+	if (cache[curNode][visited] != -1) return cache[curNode][visited];
+	cache[curNode][visited] = MAX_VALUE;
+
+	for (int i = 0; i < N; i++) {
+		if (W[curNode][i] == 0) continue;
+		if (visited & (1 << i)) continue;
+
+		cache[curNode][visited] = Min(cache[curNode][visited], W[curNode][i] + DFS(i, visited | (1 << i), N, completed));
+	}
+
+	return cache[curNode][visited];
 }
 
 int main() {
@@ -29,36 +45,17 @@ int main() {
 	cin.tie(NULL);
 	cout.tie(NULL);
 
-	for (int i = 1; i <= 10; i++) {
-		for (int j = 0; j < 10; j++) {
-			for (int k = 0; k < 10; k++) {
-				map[i][j][k] = 0;
-			}
-		}
-	}
-
-	for (int j = 1; j < 10; j++) {
-		map[1][j][1 << j] = 1;
-	}
-
-	for (int i = 2; i <= 100; i++) {
-		for (int j = 0; j < 10; j++) {
-			for (int k = 0; k < 1024; k++) {
-				if (j - 1 >= 0) {
-					map[i][j][k | (1 << j)] += map[i - 1][j - 1][k];
-				}
-				if (j + 1 <= 9) {
-					map[i][j][k | (1 << j)] += map[i - 1][j + 1][k];
-				}
-				map[i][j][k | (1 << j)] %= MOD;
-			}
-		}
-	}
-
-	int64 N;
+	int32 N;
 	cin >> N;
 
-	cout << solve(N);
+	for (int i = 0; i < N; i++) {
+		for (int j = 0; j < N; j++) {
+			cin >> W[i][j];
+		}
+	}
+
+	memset(cache, -1, sizeof(cache));
+	cout << DFS(0, 1, N, (1 << N) - 1);
 
 	return 0;
 }
