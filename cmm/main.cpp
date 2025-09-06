@@ -9,75 +9,19 @@ typedef unsigned int uint32;
 typedef long long int64;
 typedef unsigned long long uint64;
 
-const int32 MAX_N = 4000;
+int64 map[101][10][1024]; // 방문한 자리수, 현재 선택한 숫자, 지금까지 거쳐온 숫자
 
-int64 A[MAX_N];
-int64 B[MAX_N];
-int64 C[MAX_N];
-int64 D[MAX_N];
+const int64 MOD = 1000000000;
 
-int64 AB[MAX_N * MAX_N];
-int64 CD[MAX_N * MAX_N];
-int64 copied[MAX_N * MAX_N];
+int64 solve(int n) {
+	int64 ret = 0;
 
-void mergeSort(int32 s, int32 e, int64* arr, int64* copied) {
-	if (e - s == 1) return;
-
-	int32 mid = s + (e - s) / 2;
-	mergeSort(s, mid, arr, copied);
-	mergeSort(mid, e, arr, copied);
-
-	for (int32 i = s; i < e; i++) {
-		copied[i] = arr[i];
+	for (int i = 0; i < 10; i++) {
+		ret += map[n][i][1023];
+		ret %= MOD;
 	}
 
-	int32 left = s;
-	int32 right = mid;
-
-	for (int32 i = s; i < e; i++) {
-		if (left == mid) {
-			arr[i] = copied[right++];
-		}
-		else if (right == e) {
-			arr[i] = copied[left++];
-		}
-		else if (copied[left] < copied[right]) {
-			arr[i] = copied[left++];
-		}
-		else {
-			arr[i] = copied[right++];
-		}
-	}
-}
-
-int32 lowerBound(int32 s, int32 e, int64 value) {
-	while (s + 1 < e) {
-		int32 mid = s + (e - s) / 2;
-
-		if (CD[mid] + value < 0) {
-			s = mid;
-		}
-		else {
-			e = mid;
-		}
-	}
-
-	return e;
-}
-
-int32 upperBound(int32 s, int32 e, int64 value) {
-	while (s + 1 < e) {
-		int32 mid = s + (e - s) / 2;
-
-		if (CD[mid] + value <= 0) {
-			s = mid;
-		}
-		else {
-			e = mid;
-		}
-	}
-
-	return e;
+	return ret;
 }
 
 int main() {
@@ -85,38 +29,36 @@ int main() {
 	cin.tie(NULL);
 	cout.tie(NULL);
 
-	int32 n;
-	cin >> n;
-
-	for (int32 i = 0; i < n; i++) {
-		cin >> A[i] >> B[i] >> C[i] >> D[i];
-	}
-
-	int32 index = 0;
-
-	for (int32 i = 0; i < n; i++) {
-		for (int32 j = 0; j < n; j++) {
-			AB[index] = A[i] + B[j];
-			CD[index++] = C[i] + D[j];
+	for (int i = 1; i <= 10; i++) {
+		for (int j = 0; j < 10; j++) {
+			for (int k = 0; k < 10; k++) {
+				map[i][j][k] = 0;
+			}
 		}
 	}
 
-	mergeSort(0, index, AB, copied);
-	mergeSort(0, index, CD, copied);
-
-	int64 ret = 0;
-
-	for (int32 i = 0; i < index; i++) {
-		if (AB[i] + CD[0] > 0) continue;
-		if (AB[i] + CD[index - 1] < 0) continue;
-
-		int64 lower = (AB[i] + CD[0] == 0) ? 0 : lowerBound(0, index - 1, AB[i]);
-		int64 upper = (AB[i] + CD[index - 1] == 0) ? index : upperBound(0, index - 1, AB[i]);
-
-		ret += (upper - lower);
+	for (int j = 1; j < 10; j++) {
+		map[1][j][1 << j] = 1;
 	}
 
-	cout << ret;
+	for (int i = 2; i <= 100; i++) {
+		for (int j = 0; j < 10; j++) {
+			for (int k = 0; k < 1024; k++) {
+				if (j - 1 >= 0) {
+					map[i][j][k | (1 << j)] += map[i - 1][j - 1][k];
+				}
+				if (j + 1 <= 9) {
+					map[i][j][k | (1 << j)] += map[i - 1][j + 1][k];
+				}
+				map[i][j][k | (1 << j)] %= MOD;
+			}
+		}
+	}
+
+	int64 N;
+	cin >> N;
+
+	cout << solve(N);
 
 	return 0;
 }
