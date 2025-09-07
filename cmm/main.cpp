@@ -10,32 +10,9 @@ typedef unsigned int uint32;
 typedef long long int64;
 typedef unsigned long long uint64;
 
-const int32 MAX_N = 100;
-const int32 MAX_VALUE = 1000000;
-int32 coins[MAX_N];
-int32 copied[MAX_N];
-int32 cache[MAX_N][10001];
-bool used[100001] = { false, };
-
-int32 min(int32 a, int32 b) {
-	return a < b ? a : b;
-}
-
-int32 solve(int32 cur, int32 left, int32 n) {
-	if (left == 0) return 0;
-	if (cur == n) return MAX_VALUE;
-
-	if (cache[cur][left] != -1) return cache[cur][left];
-
-	cache[cur][left] = MAX_VALUE;
-	int32 nextCoin = coins[cur];
-
-	for (int i = 0; i <= left / nextCoin; i++) {
-		cache[cur][left] = min(cache[cur][left], i + solve(cur + 1, left - i * nextCoin, n));
-	}
-
-	return cache[cur][left];
-}
+int32 NArr[7];
+int32 copied[7];
+int32 printArr[7];
 
 void mergeSort(int32 s, int32 e, int32* arr, int32* copied) {
 	if (e - s == 1) return;
@@ -67,38 +44,71 @@ void mergeSort(int32 s, int32 e, int32* arr, int32* copied) {
 	}
 }
 
+class MyStack {
+private:
+	int32* values = new int32[10];
+	int32 count = 0;
+	int32 s = 0;
+public:
+public:
+	void Push(int32 value) {
+		values[s++] = value;
+		count++;
+	}
+
+	int32 Pop() {
+		int32 ret = values[--s];
+		count--;
+		return ret;
+	}
+
+	int32 Front() {
+		return values[s];
+	}
+
+	int32 Count() {
+		return count;
+	}
+
+	void Print() {
+		for (int i = 0; i < s; i++) {
+			cout << values[i] << " ";
+		}
+
+		cout << "\n";
+	}
+};
+
+void solve(MyStack* myStack, int32 N, int32 M) {
+	if (myStack->Count() == M) {
+		myStack->Print();		
+		return;
+	}
+	
+	for (int i = 0; i < N; i++) {
+		myStack->Push(NArr[i]);
+		solve(myStack, N, M);
+		myStack->Pop();
+	}
+}
+
 int main() {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
 	cout.tie(NULL);
 
-	int32 n, k;
-	cin >> n >> k;
+	int32 N, M;
+	cin >> N >> M;
 
-	for (int i = 0; i < n; i++) {
-		cin >> coins[i];
+	for (int i = 0; i < N; i++) {
+		cin >> NArr[i];
 	}
 
-	mergeSort(0, n, coins, copied);
+	mergeSort(0, N, NArr, copied);
 
-	int l = 0;
+	MyStack* myStack = new MyStack();
 
-	for (int i = 1; i < n; i++) {
-		if (coins[l] != coins[i]) {
-			coins[++l] = coins[i];
-		}
-	}
-
-	memset(cache, -1, sizeof(cache));
-
-	int32 ret = solve(0, k, l + 1);
-
-	if (ret == MAX_VALUE) {
-		cout << -1;
-	}
-	else {
-		cout << ret;
-	}
+	solve(myStack, N, M);
 
 	return 0;
 }
