@@ -10,86 +10,81 @@ typedef unsigned int uint32;
 typedef long long int64;
 typedef unsigned long long uint64;
 
-int32 NArr[7];
-int32 copied[7];
-int32 printArr[7];
+const int32 MAX_N = 500;
+const int32 MAX_M = 500;
+const int32 deltaR[4] = { 0, 0, 1, -1 };
+const int32 deltaC[4] = { 1, -1, 0, 0 };
 
-void mergeSort(int32 s, int32 e, int32* arr, int32* copied) {
-	if (e - s == 1) return;
+int32 map[MAX_N][MAX_M];
 
-	int32 mid = s + (e - s) / 2;
-	mergeSort(s, mid, arr, copied);
-	mergeSort(mid, e, arr, copied);
+struct Point {
+	int32 r;
+	int32 c;
+};
 
-	for (int i = s; i < e; i++) {
-		copied[i] = arr[i];
-	}
-
-	int32 left = s;
-	int32 right = mid;
-
-	for (int i = s; i < e; i++) {
-		if (left == mid) {
-			arr[i] = copied[right++];
-		}
-		else if (right == e) {
-			arr[i] = copied[left++];
-		}
-		else if (copied[left] < copied[right]) {
-			arr[i] = copied[left++];
-		}
-		else {
-			arr[i] = copied[right++];
-		}
-	}
-}
-
-class MyStack {
+class MyQueue {
 private:
-	int32* values = new int32[10];
+	Point* values = new Point[300000];
 	int32 count = 0;
 	int32 s = 0;
+	int32 e = 0;
 public:
-public:
-	void Push(int32 value) {
-		values[s++] = value;
+	void Push(Point p) {
+		values[e++] = p;
 		count++;
 	}
 
-	int32 Pop() {
-		int32 ret = values[--s];
+	Point Pop() {
+		Point ret = values[s];
+		s++;
 		count--;
 		return ret;
 	}
 
-	int32 Front() {
-		return values[s];
+	bool IsEmpty() {
+		return count == 0;
 	}
 
-	int32 Count() {
-		return count;
-	}
-
-	void Print() {
-		for (int i = 0; i < s; i++) {
-			cout << values[i] << " ";
-		}
-
-		cout << "\n";
+	void Clear() {
+		s = 0;
+		e = 0;
+		count = 0;
 	}
 };
 
-void solve(MyStack* myStack, int32 N, int32 M) {
-	if (myStack->Count() == M) {
-		myStack->Print();		
-		return;
-	}
-	
-	for (int i = 0; i < N; i++) {
-		myStack->Push(NArr[i]);
-		solve(myStack, N, M);
-		myStack->Pop();
-	}
+MyQueue* queue = new MyQueue();
+
+int32 findPicture(int32 r, int32 c, int32 N, int32 M) {
+	queue->Clear();
+	Point start;
+	start.r = r;
+	start.c = c;
+
+	queue->Push(start);
+	map[start.r][start.c] = 0;
+	int32 ret = 0;
+
+	while (!queue->IsEmpty()) {
+		Point cur = queue->Pop();		
+		ret++;
+
+		for (int i = 0; i < 4; i++) {
+			int32 nextR = cur.r + deltaR[i];
+			int32 nextC = cur.c + deltaC[i];
+
+			if (nextR < 0 || nextR >= N || nextC < 0 || nextC >= M) continue;
+			if (map[nextR][nextC] == 0) continue;
+
+			Point next;
+			next.r = nextR;
+			next.c = nextC;
+
+			queue->Push(next);
+			map[next.r][next.c] = 0;
+		}
+	}	
+
+	return ret;
 }
 
 int main() {
@@ -97,18 +92,30 @@ int main() {
 	cin.tie(NULL);
 	cout.tie(NULL);
 
-	int32 N, M;
-	cin >> N >> M;
+	int32 n, m;
+	cin >> n >> m;
 
-	for (int i = 0; i < N; i++) {
-		cin >> NArr[i];
+	for (int i = 0; i < n; i++) {
+		for (int j = 0; j < m; j++) {
+			cin >> map[i][j];
+		}
 	}
 
-	mergeSort(0, N, NArr, copied);
+	int32 ret = 0;
+	int32 retCount = 0;
 
-	MyStack* myStack = new MyStack();
+	for (int i = 0; i < n; i++) {
+		for (int j = 0; j < m; j++) {
+			if (map[i][j] != 0) {
+				int32 temp = findPicture(i, j, n, m);
+				ret = temp > ret ? temp : ret;
+				retCount++;
+			}
+		}
+	}
 
-	solve(myStack, N, M);
+	cout << retCount << "\n";
+	cout << ret;
 
 	return 0;
 }
