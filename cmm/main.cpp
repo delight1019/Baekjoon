@@ -11,72 +11,22 @@ typedef long long int64;
 typedef unsigned long long uint64;
 typedef unsigned char ubyte;
 
-const int32 MAX_N = 1000;
-const int32 MAX_M = 1000;
+uint64 cache[64];
 
-char map[MAX_N][MAX_M];
-bool visited[MAX_N][MAX_M];
-int32 cycle[MAX_N][MAX_M];
+uint64 fSum(uint64 x) {
+	uint64 ret = x & 1;
+	uint32 bitIndex = 63;
 
-int32 ret = 0;
+	while (bitIndex > 0) {
+		if (x & (1LL << bitIndex)) {
+			ret += cache[bitIndex - 1] + (x - (1LL << bitIndex) + 1);
+			x -= (1LL << bitIndex);
+		}
 
-struct delta {
-	int32 r;
-	int32 c;
-};
-
-delta goTo(int32 r, int32 c) {
-	delta ret;
-
-	if (map[r][c] == 'U') {
-		ret.r = -1;
-		ret.c = 0;
-	}
-	else if (map[r][c] == 'D') {
-		ret.r = 1;
-		ret.c = 0;
-	}
-	else if (map[r][c] == 'L') {
-		ret.r = 0;
-		ret.c = -1;
-	}
-	else if (map[r][c] == 'R') {
-		ret.r = 0;
-		ret.c = 1;
+		bitIndex--;
 	}
 
 	return ret;
-}
-
-int32 findCycle(int32 r, int32 c) {
-	while (true) {
-		if (visited[r][c]) break;
-
-		visited[r][c] = true;
-		delta d = goTo(r, c);
-		r += d.r;
-		c += d.c;
-	}
-
-	if (cycle[r][c] != -1) {
-		return cycle[r][c];
-	}
-	else {
-		return ++ret;
-	}
-}
-
-void checkCycle(int32 r, int32 c, int32 cycleValue) {
-	while (true) {
-		if (cycle[r][c] != -1) {
-			break;
-		}
-
-		cycle[r][c] = cycleValue;
-		delta d = goTo(r, c);
-		r += d.r;
-		c += d.c;
-	}
 }
 
 int main() {
@@ -84,27 +34,16 @@ int main() {
 	cin.tie(NULL);
 	cout.tie(NULL);
 
-	int32 N, M;
-	cin >> N >> M;
+	cache[0] = 1;
 
-	for (int i = 0; i < N; i++) {
-		for (int j = 0; j < M; j++) {
-			cin >> map[i][j];
-			cycle[i][j] = -1;
-			visited[i][j] = false;
-		}
+	for (int i = 1; i < 64; i++) {
+		cache[i] = 2 * cache[i - 1] + (1LL << i);
 	}
 
-	for (int i = 0; i < N; i++) {
-		for (int j = 0; j < M; j++) {
-			if (visited[i][j]) continue;
+	uint64 A, B;
+	cin >> A >> B;
 
-			int32 cycleValue = findCycle(i, j);
-			checkCycle(i, j, cycleValue);
-		}
-	}
-
-	cout << ret;
+	cout << fSum(B) - fSum(A - 1);
 
 	return 0;
 }
