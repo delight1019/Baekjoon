@@ -11,39 +11,61 @@ typedef long long int64;
 typedef unsigned long long uint64;
 typedef unsigned char ubyte;
 
-uint64 cache[64];
+const int32 MAX_G = 100000;
+const int32 MAX_P = 100000;
 
-uint64 fSum(uint64 x) {
-	uint64 ret = x & 1;
-	uint32 bitIndex = 63;
-
-	while (bitIndex > 0) {
-		if (x & (1LL << bitIndex)) {
-			ret += cache[bitIndex - 1] + (x - (1LL << bitIndex) + 1);
-			x -= (1LL << bitIndex);
-		}
-
-		bitIndex--;
-	}
-
-	return ret;
-}
+int32 G, P;
+int32 PArr[MAX_P];
+bool visited[MAX_G + 1] = { false, };
 
 int main() {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
 	cout.tie(NULL);
 
-	cache[0] = 1;
+	cin >> G >> P;
 
-	for (int i = 1; i < 64; i++) {
-		cache[i] = 2 * cache[i - 1] + (1LL << i);
+	for (int i = 0; i < P; i++) {
+		cin >> PArr[i];
 	}
 
-	uint64 A, B;
-	cin >> A >> B;
+	int32 ret = -1;
+	int32 globalMaxGate = G;
 
-	cout << fSum(B) - fSum(A - 1);
+	for (int i = 0; i < P; i++) {
+		int32 maxGate = PArr[i];
+		maxGate = maxGate > globalMaxGate ? globalMaxGate : maxGate;
+
+		bool docked = false;
+
+		for (int j = maxGate; j > 0; j--) {
+			if (visited[j] == false) {
+				visited[j] = true;
+				docked = true;
+				break;
+			}
+		}
+
+		if (docked == false) {
+			ret = i;
+			break;
+		}
+
+		for (int j = globalMaxGate; j > 0; j--) {
+			if (visited[j] == false) break;
+
+			globalMaxGate--;
+		}
+	}
+
+	if (ret == -1) {
+		cout << P;
+	}
+	else {
+		cout << ret;
+	}
+
+	
 
 	return 0;
 }
