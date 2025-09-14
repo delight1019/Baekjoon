@@ -14,51 +14,53 @@ typedef long long int64;
 typedef unsigned long long uint64;
 typedef unsigned char ubyte;
 
-struct Node {
-	int32 index;
-	int32 length;
+#define MAX(a, b) a < b ? b : a;
 
-	Node(int32 e, int32 l) {
-		index = e;
-		length = l;
+const int32 MAX_SIZE = 10;
+const int32 INVALID = 0;
+const int32 VALID = 1;
+const int32 BISHOP = 2;
+
+int32 gSize;
+int32 gMap[MAX_SIZE][MAX_SIZE];
+int32 gAnswer[2];
+bool cache1[MAX_SIZE * 2 + 1];
+bool cache2[MAX_SIZE * 2 + 1];
+
+bool canBishop(int32 r, int32 c) {
+	if (gMap[r][c] == INVALID) return false;
+	if (cache1[r - c + gSize]) return false;
+	if (cache2[r + c]) return false;
+
+	return true;
+}
+
+void putOn(int32 r, int32 c) {
+	cache1[r - c + gSize] = true;
+	cache2[r + c] = true;
+}
+
+void takeOff(int32 r, int32 c) {
+	cache1[r - c + gSize] = false;
+	cache2[r + c] = false;
+}
+
+void solve(int32 r, int32 c, int32 count, int32 color) {
+	if (c >= gSize) {
+		r++;
+		c = (r % 2 == color) ? 0 : 1;
+	}
+	if (r >= gSize) {
+		gAnswer[color] = MAX(gAnswer[color], count);
+		return;
 	}
 
-	bool operator < (const Node& other) const {
-		return length < other.length;
+	if (canBishop(r, c)) {
+		putOn(r, c);
+		solve(r, c + 2, count + 1, color);
+		takeOff(r, c);
 	}
-
-	bool operator > (const Node& other) const {
-		return length > other.length;
-	}
-};
-
-int32 N, D;
-int32 cache[10001];
-vector<Node>* graphs = new vector<Node>[10001];
-
-void solve() {
-	priority_queue<Node, vector<Node>, greater<Node>> pq;
-	pq.push(Node(0, 0));
-
-	while (!pq.empty()) {
-		Node curNode = pq.top();
-		int32 cur = curNode.index;
-		pq.pop();
-
-		for (vector<Node>::iterator it = graphs[cur].begin(); it != graphs[cur].end(); it++) {
-			Node nextNode = *it;
-			if (cache[nextNode.index] > curNode.length + nextNode.length) {
-				cache[nextNode.index] = curNode.length + nextNode.length;
-				nextNode.length += curNode.length;
-				pq.push(nextNode);
-			}
-		}
-
-		if (cache[cur + 1] >= curNode.length + 1) {
-			cache[cur + 1] = curNode.length + 1;
-			pq.push(Node(cur + 1, curNode.length + 1));
-		}
-	}
+	solve(r, c + 2, count, color);
 }
 
 int main() {
@@ -66,21 +68,18 @@ int main() {
 	cin.tie(NULL);
 	cout.tie(NULL);
 
-	cin >> N >> D;
+	cin >> gSize;
 
-	for (int n = 0; n < N; n++) {
-		int32 s, e, l;
-		cin >> s >> e >> l;
-		graphs[s].push_back(Node(e, l));
+	for (int32 i = 0; i < gSize; i++) {
+		for (int32 j = 0; j < gSize; j++) {
+			cin >> gMap[i][j];
+		}
 	}
 
-	for (int i = 0; i <= 10000; i++) {
-		cache[i] = i;
-	}
+	solve(0, 0, 0, 0);
+	solve(0, 1, 0, 1);
 
-	solve();
-
-	cout << cache[D];
+	cout << gAnswer[0] + gAnswer[1];
 
 	return 0;
 }                                      
