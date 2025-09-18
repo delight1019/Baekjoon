@@ -16,29 +16,39 @@ typedef unsigned char ubyte;
 #define MAX(a, b) a < b ? b : a;
 #define MIN(a, b) a < b ? a : b;
 
+int32 GCD(int32 a, int32 b) {
+	if (a < b) {
+		int32 temp = a;
+		a = b;
+		b = temp;
+	}
+
+	while (b > 0) {
+		int32 r = a % b;
+		a = b;
+		b = r;
+	}
+
+	return a;
+}
+
 int main() {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
 	cout.tie(NULL);
 
-	string input;
-	cin >> input;
+	int32 T;
+	cin >> T;
 
-	int32 joi = 0;
-	int32 ioi = 0;
+	for (int32 testCase = 0; testCase < T; testCase++) {
+		int32 a, b;
+		cin >> a >> b;
 
-	for (int32 i = 0; i + 2 < input.length(); i++) {
-		if (input[i] == 'J' && input[i + 1] == 'O' && input[i + 2] == 'I') {
-			joi++;
-		}
+		int32 gcd = GCD(a, b);
+		int32 lcm = a * (b / gcd);
 
-		if (input[i] == 'I' && input[i + 1] == 'O' && input[i + 2] == 'I') {
-			ioi++;
-		}
+		cout << lcm << " " << gcd << "\n";
 	}
-
-	cout << joi << "\n";
-	cout << ioi << "\n";
 
 	return 0;
 }                                      
