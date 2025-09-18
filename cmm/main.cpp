@@ -16,39 +16,33 @@ typedef unsigned char ubyte;
 #define MAX(a, b) a < b ? b : a;
 #define MIN(a, b) a < b ? a : b;
 
-bool cache[10];
+const int32 MAX_N = 101;
 
-int32 solve(int64 X) {
-	memset(cache, false, sizeof(cache));
-
-	while (X > 0) {
-		cache[X % 10] = true;
-		X /= 10;
-	}
-
-	int32 ret = 0;
-
-	for (int32 i = 0; i < 10; i++) {
-		if (cache[i]) ret++;
-	}
-
-	return ret;
-}
+bool chairs[MAX_N] = { false, };
 
 int main() {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
 	cout.tie(NULL);
 
-	int32 T;
-	cin >> T;
+	int32 N;
+	cin >> N;
 
-	for (int32 testCase = 1; testCase <= T; testCase++) {
-		int64 X;
-		cin >> X;
+	int32 ret = 0;
 
-		cout << solve(X) << "\n";
+	for (int32 n = 0; n < N; n++) {
+		int32 cur;
+		cin >> cur;
+
+		if (chairs[cur]) {
+			ret++;
+		}
+		else {
+			chairs[cur] = true;
+		}
 	}
+
+	cout << ret;
 
 	return 0;
 }                                      
