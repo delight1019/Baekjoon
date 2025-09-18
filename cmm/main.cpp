@@ -1,6 +1,7 @@
 #pragma disable(4996)
 
 #include <iostream>
+#include <cstring>
 
 using namespace std;
 
@@ -15,23 +16,23 @@ typedef unsigned char ubyte;
 #define MAX(a, b) a < b ? b : a;
 #define MIN(a, b) a < b ? a : b;
 
-const int32 MAX_N = 100;
-int32 numbers[MAX_N];
+bool cache[10];
 
-int64 GCD(int32 a, int32 b) {
-	if (a < b) {
-		int32 temp = a;
-		a = b;
-		b = temp;
+int32 solve(int64 X) {
+	memset(cache, false, sizeof(cache));
+
+	while (X > 0) {
+		cache[X % 10] = true;
+		X /= 10;
 	}
 
-	while (b > 0) {
-		int32 r = a % b;
-		a = b;
-		b = r;
+	int32 ret = 0;
+
+	for (int32 i = 0; i < 10; i++) {
+		if (cache[i]) ret++;
 	}
 
-	return a;
+	return ret;
 }
 
 int main() {
@@ -39,26 +40,14 @@ int main() {
 	cin.tie(NULL);
 	cout.tie(NULL);
 
-	int32 t;
-	cin >> t;
+	int32 T;
+	cin >> T;
 
-	for (int32 testCase = 1; testCase <= t; testCase++) {
-		int32 n;
-		cin >> n;
+	for (int32 testCase = 1; testCase <= T; testCase++) {
+		int64 X;
+		cin >> X;
 
-		for (int32 i = 0; i < n; i++) {
-			cin >> numbers[i];
-		}
-
-		int64 ret = 0;
-
-		for (int32 i = 0; i < n; i++) {
-			for (int32 j = i + 1; j < n; j++) {
-				ret += GCD(numbers[i], numbers[j]);
-			}
-		}
-
-		cout << ret << "\n";
+		cout << solve(X) << "\n";
 	}
 
 	return 0;
