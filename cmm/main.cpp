@@ -16,33 +16,29 @@ typedef unsigned char ubyte;
 #define MAX(a, b) a < b ? b : a;
 #define MIN(a, b) a < b ? a : b;
 
-const int32 MAX_N = 101;
-
-bool chairs[MAX_N] = { false, };
-
 int main() {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
 	cout.tie(NULL);
 
-	int32 N;
-	cin >> N;
+	string input;
+	cin >> input;
 
-	int32 ret = 0;
+	int32 joi = 0;
+	int32 ioi = 0;
 
-	for (int32 n = 0; n < N; n++) {
-		int32 cur;
-		cin >> cur;
-
-		if (chairs[cur]) {
-			ret++;
+	for (int32 i = 0; i + 2 < input.length(); i++) {
+		if (input[i] == 'J' && input[i + 1] == 'O' && input[i + 2] == 'I') {
+			joi++;
 		}
-		else {
-			chairs[cur] = true;
+
+		if (input[i] == 'I' && input[i + 1] == 'O' && input[i + 2] == 'I') {
+			ioi++;
 		}
 	}
 
-	cout << ret;
+	cout << joi << "\n";
+	cout << ioi << "\n";
 
 	return 0;
 }                                      
