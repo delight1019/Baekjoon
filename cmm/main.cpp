@@ -21,46 +21,26 @@ int main() {
 	cin.tie(NULL);
 	cout.tie(NULL);
 
-	int32 testCase = 0;
+	for (int32 i = 0; i < 3; i++) {
+		int32 ret = 0;
 
-	while (true) {
-		int32 a, b;
-		string oper;
+		string input;
+		cin >> input;
 
-		cin >> a >> oper >> b;
+		int32 cur = 1;
 
-		bool ret = false;
+		for (int j = 1; j < input.length(); j++) {
+			if (input[j - 1] == input[j]) {
+				cur++;
+			}
+			else {
+				cur = 1;
+			}
 
-		if (oper == "E") {
-			break;
-		}
-		else if (oper == ">") {
-			ret = (a > b);
-		}
-		else if (oper == ">=") {
-			ret = (a >= b);
-		}
-		else if (oper == "<") {
-			ret = (a < b);
-		}
-		else if (oper == "<=") {
-			ret = (a <= b);
-		}
-		else if (oper == "==") {
-			ret = (a == b);
-		}
-		else if (oper == "!=") {
-			ret = (a != b);
+			ret = MAX(ret, cur);
 		}
 
-		cout << "Case " << ++testCase << ": ";
-		if (ret) {
-			cout << "true";
-		}
-		else {
-			cout << "false";
-		}
-		cout << "\n";
+		cout << ret << "\n";
 	}
 
 	return 0;
