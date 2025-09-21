@@ -19,44 +19,15 @@ typedef unsigned char ubyte;
 #define MAX(a, b) a < b ? b : a;
 #define MIN(a, b) a < b ? a : b;
 
-const int32 MAX_N = 1000;
+const int32 DENO = 1000000007;
 
-vector<string> robots[MAX_N];
+vector<int64> menus;
+int32 factors[300000];
+int64 sums[300000] = { 0, };
 
-bool vectorSort(const vector<string>& A, const vector<string>& B) {
-	int32 a = 0;
-	int32 b = 0;
-
-	while (a < A.size() && b < B.size()) {
-		if (A[a] == B[b]) {
-			a++;
-			b++;
-
-			if (a == A.size()) return true;
-			if (b == B.size()) return false;
-		}
-		else {
-			return A[a] < B[b];
-		}
-	}
-
-	return true;
-}
-
-struct Node {
-	string id;
-	vector<Node> children;
-
-	Node(string i) {
-		id = i;
-	}
-};
-
-void printHelp(int32 N, string A) {
-	for (int32 i = 0; i < N; i++) {
-		cout << "--";
-	}
-	cout << A << "\n";
+int64 calc(int32 i, int32 j) {
+	int64 factor = factors[j - i - 1];
+	return ((menus[j] - menus[i]) * factor) % DENO;
 }
 
 int main() {
@@ -67,44 +38,46 @@ int main() {
 	int32 N;
 	cin >> N;
 
-	for (int32 n = 0; n < N; n++) {
-		int32 cur;
-		cin >> cur;
+	int64 factor = 1;
 
-		for (int32 i = 0; i < cur; i++) {
-			string temp;
-			cin >> temp;
-			robots[n].push_back(temp);
+	for (int32 n = 0; n < N; n++) {
+		int64 temp;
+		cin >> temp;
+		menus.push_back(temp);
+
+		if (n > 0) {
+			factor *= 2;
+			factor %= DENO;
+		}
+
+		factors[n] = factor;
+	}
+
+	sort(menus.begin(), menus.end());
+
+	for (int32 n = 0; n < N; n++) {
+		if (n == 0) {
+			sums[n] = 0;
+		}
+		else {
+			sums[n] += sums[n - 1] * 2;
+			sums[n] %= DENO;
+			int64 temp = menus[n] - menus[n - 1];
+			int64 temp2 = factors[n] - 1;
+			int64 temp3 = (temp * temp2) % DENO;
+			sums[n] += temp3;
+			sums[n] %= DENO;
 		}
 	}
 
-	sort(robots, robots + N);
+	int64 ret = 0;
 
-	vector<string> printed;
-
-	for (int32 n = 0; n < N; n++) {
-		const vector<string>& curRobot = robots[n];
-
-		for (int32 m = 0; m < curRobot.size(); m++) {
-			if (printed.size() <= m) {
-				printed.push_back(curRobot[m]);
-				printHelp(m, curRobot[m]);
-			}
-			else if (printed[m] == curRobot[m]) {
-				continue;
-			}
-			else {
-				int32 temp = printed.size() -1;
-
-				for (int32 i = temp; i >= m; i--) {
-					printed.pop_back();
-				}
-
-				printed.push_back(curRobot[m]);
-				printHelp(m, curRobot[m]);
-			}
-		}
+	for (int32 i = 0; i < N; i++) {
+		ret += sums[i];
+		ret %= DENO;
 	}
+
+	cout << ret;
 
 	return 0;
 }                                      
