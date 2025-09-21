@@ -19,52 +19,44 @@ typedef unsigned char ubyte;
 #define MAX(a, b) a < b ? b : a;
 #define MIN(a, b) a < b ? a : b;
 
-const int32 MAX_N = 20;
+const int32 MAX_N = 1000;
 
-const int32 deltaR[4] = { 0, 0, 1, -1 };
-const int32 deltaC[4] = { 1, -1, 0, 0 };
+vector<string> robots[MAX_N];
 
-int32 classRoom[MAX_N][MAX_N] = { {0, }, };
-int32 orders[MAX_N * MAX_N];
-int32 friends[MAX_N * MAX_N + 1][4];
+bool vectorSort(const vector<string>& A, const vector<string>& B) {
+	int32 a = 0;
+	int32 b = 0;
 
-struct Chair {
-	int32 r;
-	int32 c;
-	int32 score;
+	while (a < A.size() && b < B.size()) {
+		if (A[a] == B[b]) {
+			a++;
+			b++;
 
-	Chair(int32 r, int32 c, int32 s) {
-		this->r = r;
-		this->c = c;
-		this->score = s;
-	}
-};
-
-int32 getScore(int32 number, int32 r, int32 c, int32 N) {
-	if (classRoom[r][c] != 0) return -1;
-
-	int32 score = 0;
-
-	for (int32 n = 0; n < 4; n++) {
-		int32 nextR = r + deltaR[n];
-		int32 nextC = c + deltaC[n];
-
-		if (nextR >= 0 && nextR < N && nextC >= 0 && nextC < N) {
-			if (classRoom[nextR][nextC] == 0) {
-				score += 1;
-			}
-			else {
-				for (int i = 0; i < 4; i++) {
-					if (classRoom[nextR][nextC] == friends[number][i]) {
-						score += 10;
-						break;
-					}
-				}
-			}
+			if (a == A.size()) return true;
+			if (b == B.size()) return false;
+		}
+		else {
+			return A[a] < B[b];
 		}
 	}
 
-	return score;
+	return true;
+}
+
+struct Node {
+	string id;
+	vector<Node> children;
+
+	Node(string i) {
+		id = i;
+	}
+};
+
+void printHelp(int32 N, string A) {
+	for (int32 i = 0; i < N; i++) {
+		cout << "--";
+	}
+	cout << A << "\n";
 }
 
 int main() {
@@ -75,68 +67,44 @@ int main() {
 	int32 N;
 	cin >> N;
 
-	for (int32 i = 0; i < N * N; i++) {
+	for (int32 n = 0; n < N; n++) {
 		int32 cur;
 		cin >> cur;
 
-		orders[i] = cur;
-
-		for (int32 j = 0; j < 4; j++) {
-			cin >> friends[cur][j];
+		for (int32 i = 0; i < cur; i++) {
+			string temp;
+			cin >> temp;
+			robots[n].push_back(temp);
 		}
 	}
 
-	for (int32 i = 0; i < N * N; i++) {
-		int32 cur = orders[i];
+	sort(robots, robots + N);
 
-		Chair best(-1, -1, -1);
+	vector<string> printed;
 
-		for (int32 r = 0; r < N; r++) {
-			for (int32 c = 0; c < N; c++) {
-				int32 score = getScore(cur, r, c, N);
+	for (int32 n = 0; n < N; n++) {
+		const vector<string>& curRobot = robots[n];
 
-				if (best.score < score) {
-					best.r = r;
-					best.c = c;
-					best.score = score;
+		for (int32 m = 0; m < curRobot.size(); m++) {
+			if (printed.size() <= m) {
+				printed.push_back(curRobot[m]);
+				printHelp(m, curRobot[m]);
+			}
+			else if (printed[m] == curRobot[m]) {
+				continue;
+			}
+			else {
+				int32 temp = printed.size() -1;
+
+				for (int32 i = temp; i >= m; i--) {
+					printed.pop_back();
 				}
+
+				printed.push_back(curRobot[m]);
+				printHelp(m, curRobot[m]);
 			}
 		}
-
-		classRoom[best.r][best.c] = cur;
 	}
-
-	int32 ret = 0;
-
-	for (int32 r = 0; r < N; r++) {
-		for (int32 c = 0; c < N; c++) {
-			int32 cur = classRoom[r][c];
-			int32 curScore = 0;
-
-			for (int i = 0; i < 4; i++) {
-				int32 nextR = r + deltaR[i];
-				int32 nextC = c + deltaC[i];
-
-				if (nextR >= 0 && nextR < N && nextC >= 0 && nextC < N) {
-					for (int j = 0; j < 4; j++) {
-						if (classRoom[nextR][nextC] == friends[cur][j]) {
-							if (curScore == 0) {
-								curScore = 1;
-							}
-							else {
-								curScore *= 10;
-							}
-							break;
-						}
-					}
-				}
-			}
-
-			ret += curScore;
-		}
-	}
-
-	cout << ret;
 
 	return 0;
 }                                      
