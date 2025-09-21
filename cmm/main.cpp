@@ -19,143 +19,49 @@ typedef unsigned char ubyte;
 #define MAX(a, b) a < b ? b : a;
 #define MIN(a, b) a < b ? a : b;
 
-struct Card {
-	char Color;
-	int32 Number;
+int64 AValues[37];
+int64 BValues[37];
 
-	Card() {
-		Color = 'X';
-		Number = -1;
+bool isExpressible(char x, int32 n) {
+	if ('0' <= x && x <= '9') {
+		int32 nx = x - '0';
+		return nx < n;
 	}
-
-	Card(char c, int32 n) {
-		Color = c;
-		Number = n;
+	else {
+		int32 nx = (x - 'a') + 10;
+		return nx < n;
 	}
-
-	Card(const Card& other) {
-		this->Color = other.Color;
-		this->Number = other.Number;
-	}
-};
-
-Card Cards[5];
-int32 Numbers[10] = { 0, };
-
-bool byColor(const Card& a, const Card& b) {
-	if (a.Color == b.Color) {
-		return a.Number < b.Number;
-	}
-
-	return a.Color < b.Color;
 }
 
-bool byNumber(const Card& a, const Card& b) {
-	if (a.Number == b.Number) {
-		return a.Color < b.Color;
+int32 toNumber(char x) {
+	if ('0' <= x && x <= '9') {
+		return x - '0';
 	}
-
-	return a.Number < b.Number;
+	else {
+		return (x - 'a') + 10;
+	}
 }
 
-int32 Rule1() {
-	sort(Cards, Cards + 5, byColor);
-	Card prev = Cards[0];
+int64 checkString(string XA, int32 n) {
+	int64 ret = 0;
 
-	for (int i = 1; i < 5; i++) {
-		Card cur = Cards[i];
+	for (int32 i = 0; i < XA.length(); i++) {
+		int nx = toNumber(XA[i]);
 
-		if (prev.Color != cur.Color) {
-			return 0;
-		}
-		if (cur.Number != prev.Number + 1) {
-			return 0;
+		if (nx >= n) {
+			return -1;
 		}
 
-		prev = cur;
-	}
+		ret *= n;
+		ret += nx;
 
-	return 900 + prev.Number;
-}
-
-int32 Rule2() {
-	for (int32 i = 1; i <= 9; i++) {
-		if (Numbers[i] == 4) return 800 + i;
-	}
-
-	return 0;
-}
-
-int32 Rule3And6And7And8And9() {
-	int32 three = -1;
-	int32 two1 = -1;
-	int32 two2 = -1;
-
-	for (int32 i = 1; i <= 9; i++) {
-		if (Numbers[i] == 3) {
-			three = i;
-		}
-		if (Numbers[i] == 2) {
-			if (two1 == -1) {
-				two1 = i;
-			}
-			else if (two2 == -1) {
-				two2 = i;
-			}
+		// overflow
+		if (ret < 0) {
+			return -1;
 		}
 	}
 
-	// Rule 3
-	if (three != -1 && two1 != -1) {
-		return 700 + three * 10 + two1;
-	}
-	
-	// Rule 6
-	if (three != -1) {
-		return 400 + three;
-	}
-
-	// Rule 7
-	if (two1 != -1 && two2 != -1) {
-		return 300 + two2 * 10 + two1;
-	}
-
-	// Rule 8
-	if (two1 != -1) {
-		return 200 + two1;
-	}
-
-	// Rule9
-	sort(Cards, Cards + 5, byNumber);
-	return 100 + Cards[4].Number;
-}
-
-int32 Rule4() {
-	sort(Cards, Cards + 5, byColor);
-
-	if (Cards[0].Color == Cards[4].Color) {
-		return 600 + Cards[4].Number;
-	}
-
-	return 0;
-}
-
-int32 Rule5() {
-	sort(Cards, Cards + 5, byNumber);
-
-	Card prev = Cards[0];
-
-	for (int32 i = 1; i < 5; i++) {
-		Card cur = Cards[i];
-
-		if (prev.Number != cur.Number - 1) {
-			return 0;
-		}
-
-		prev = cur;
-	}
-
-	return 500 + prev.Number;
+	return ret;
 }
 
 int main() {
@@ -163,19 +69,41 @@ int main() {
 	cin.tie(NULL);
 	cout.tie(NULL);
 
-	for (int32 i = 0; i < 5; i++) {
-		cin >> Cards[i].Color >> Cards[i].Number;
-		Numbers[Cards[i].Number]++;
+	string XA, XB;
+	cin >> XA >> XB;	
+
+	for (int i = 2; i <= 36; i++) {
+		AValues[i] = checkString(XA, i);
+		BValues[i] = checkString(XB, i);
 	}	
 
 	int32 ret = 0;
-	ret = MAX(ret, Rule1());
-	ret = MAX(ret, Rule2());
-	ret = MAX(ret, Rule3And6And7And8And9());
-	ret = MAX(ret, Rule4());
-	ret = MAX(ret, Rule5());
+	int32 retA = 0;
+	int32 retB = 0;
 
-	cout << ret;
+	for (int i = 2; i <= 36; i++) {
+		if (AValues[i] == -1) continue;
+
+		for (int j = 2; j <= 36; j++) {
+			if (i == j) continue;
+
+			if (AValues[i] == BValues[j]) {
+				ret++;
+				retA = i;
+				retB = j;
+			}
+		}
+	}
+
+	if (ret == 0) {
+		cout << "Impossible";
+	}
+	else if (ret > 1) {
+		cout << "Multiple";
+	}
+	else {
+		cout << AValues[retA] << " " << retA << " " << retB;
+	}
 
 	return 0;
 }                                      
