@@ -19,47 +19,34 @@ typedef unsigned char ubyte;
 #define MAX(a, b) a < b ? b : a;
 #define MIN(a, b) a < b ? a : b;
 
-const int32 DENO = 10007;
-int64 cache[53][53];
-
-int64 binomial(int64 n, int64 k) {
-	if (k == 0 || n == k) return 1;
-
-	int64& ret = cache[n][k];
-
-	if (ret != -1) return ret;
-
-	ret = binomial(n - 1, k) + binomial(n - 1, k - 1);
-	ret %= DENO;
-	return ret;
-}
-
 int main() {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
 	cout.tie(NULL);
 
-	int32 N;
-	cin >> N;
+	uint64 n;
+	cin >> n;
 
-	memset(cache, -1, sizeof(cache));
+	uint64 ret = n;
 
-	int64 ret = 0;
+	uint64 p = 2;
 
-	for (int32 i = 1; 4 * i <= N; i++) {
-		int64 temp = binomial(13, i) * binomial(52 - 4 * i, N - 4 * i);
-		temp %= DENO;
+	while (p * p <= n) {
+		if (n % p == 0) {
+			ret /= p;
+			ret *= (p - 1);
 
-		if (i % 2 == 0) {
-			ret -= temp;
-
-			if (ret < 0) ret += DENO;
-		}
-		else {
-			ret += temp;
+			while (n % p == 0) {
+				n /= p;
+			}
 		}
 
-		ret %= DENO;
+		p++;
+	}
+
+	if (n > 1) {
+		ret /= n;
+		ret *= (n - 1);
 	}
 
 	cout << ret;
