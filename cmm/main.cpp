@@ -20,42 +20,36 @@ typedef unsigned char ubyte;
 #define MAX(a, b) a < b ? b : a;
 #define MIN(a, b) a < b ? a : b;
 
-stack<int32> nums;
+uint64 cache[64][128];
+
+// N ÃÊ, X °Å¸®
+uint64 solve(uint64 N, uint64 X) {
+	if (X == 0) return 0;
+	if (N == 0) return 1;	
+
+	uint64& ret = cache[N][X];
+
+	if (ret != -1) return ret;
+
+	return ret = solve(N - 1, X + 1) + solve(N - 1, X - 1);
+}
 
 int main() {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
 	cout.tie(NULL);
 
-	string input;
-	cin >> input;
+	memset(cache, -1, sizeof(cache));
 
-	for (int32 i = 0; i < input.length(); i++) {
-		if (input[i] >= '0' && input[i] <= '9') {
-			nums.push(input[i] - '0');
-		}
-		else {
-			int32 a = nums.top();
-			nums.pop();
-			int32 b = nums.top();
-			nums.pop();
+	uint64 n, k;
+	cin >> k >> n;
 
-			if (input[i] == '+') {
-				nums.push(b + a);
-			}
-			else if (input[i] == '-') {
-				nums.push(b - a);
-			}
-			else if (input[i] == '*') {
-				nums.push(b * a);
-			}
-			else if (input[i] == '/') {
-				nums.push(b / a);
-			}
-		}
+	if (k == 0) {
+		cout << 0;
+		return 0;
 	}
 
-	cout << nums.top();
+	cout << solve(n, k);
 
 	return 0;
 }
