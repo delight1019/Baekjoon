@@ -5,7 +5,7 @@
 #include <vector>
 #include <queue>
 #include <algorithm>
-#include <string>
+#include <stack>
 
 using namespace std;
 
@@ -20,25 +20,7 @@ typedef unsigned char ubyte;
 #define MAX(a, b) a < b ? b : a;
 #define MIN(a, b) a < b ? a : b;
 
-const char vowels[6] = { 'a', 'e', 'i', 'o', 'u', 'h' };
-const string aphoWords[10] = { "c", "j", "n", "m", "t", "s", "l", "l", "d", "qu" };
-vector<string > words;
-
-bool IsVowel(char x) {
-	for (int i = 0; i < 6; i++) {
-		if (vowels[i] == x)  return true;
-	}
-
-	return false;
-}
-
-bool IsAphoWord(string x) {
-	for (int i = 0; i < 10; i++) {
-		if (aphoWords[i] == x) return true;
-	}
-
-	return false;
-}
+stack<int32> nums;
 
 int main() {
 	ios_base::sync_with_stdio(false);
@@ -46,31 +28,34 @@ int main() {
 	cout.tie(NULL);
 
 	string input;
-	getline(cin, input);
-
-	string curWord = "";
+	cin >> input;
 
 	for (int32 i = 0; i < input.length(); i++) {
-		if (input[i] == ' ' || input[i] == '-') {
-			words.push_back(curWord);
-			curWord = "";
-		}
-		else if (input[i] == '\'') {
-			if (IsVowel(input[i + 1]) && IsAphoWord(curWord)) {
-				words.push_back(curWord);
-				curWord = "";
-			}
+		if (input[i] >= '0' && input[i] <= '9') {
+			nums.push(input[i] - '0');
 		}
 		else {
-			curWord += input[i];
+			int32 a = nums.top();
+			nums.pop();
+			int32 b = nums.top();
+			nums.pop();
+
+			if (input[i] == '+') {
+				nums.push(b + a);
+			}
+			else if (input[i] == '-') {
+				nums.push(b - a);
+			}
+			else if (input[i] == '*') {
+				nums.push(b * a);
+			}
+			else if (input[i] == '/') {
+				nums.push(b / a);
+			}
 		}
 	}
 
-	if (curWord != "") {
-		words.push_back(curWord);
-	}
-
-	cout << words.size();
+	cout << nums.top();
 
 	return 0;
 }
