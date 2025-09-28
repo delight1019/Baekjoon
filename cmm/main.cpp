@@ -20,18 +20,15 @@ typedef unsigned char ubyte;
 #define MAX(a, b) a < b ? b : a;
 #define MIN(a, b) a < b ? a : b;
 
-uint64 cache[64][128];
+int32 price(int32 C, int32 P, int32 pr) {
+	int32 ret = 0;
 
-// N ÃÊ, X °Å¸®
-uint64 solve(uint64 N, uint64 X) {
-	if (X == 0) return 0;
-	if (N == 0) return 1;	
+	while (C >= 0) {
+		C -= P;
+		ret += pr;
+	}
 
-	uint64& ret = cache[N][X];
-
-	if (ret != -1) return ret;
-
-	return ret = solve(N - 1, X + 1) + solve(N - 1, X - 1);
+	return ret;
 }
 
 int main() {
@@ -39,17 +36,29 @@ int main() {
 	cin.tie(NULL);
 	cout.tie(NULL);
 
-	memset(cache, -1, sizeof(cache));
+	int32 N;
+	cin >> N;
 
-	uint64 n, k;
-	cin >> k >> n;
+	int32 Y = 0;
+	int32 M = 0;
 
-	if (k == 0) {
-		cout << 0;
-		return 0;
+	for (int32 n = 0; n < N; n++) {
+		int32 cur;
+		cin >> cur;
+
+		Y += price(cur, 30, 10);
+		M += price(cur, 60, 15);
 	}
 
-	cout << solve(n, k);
+	if (Y == M) {
+		cout << "Y M " << Y;
+	}
+	else if (Y < M) {
+		cout << "Y " << Y;
+	}
+	else {
+		cout << "M " << M;
+	}
 
 	return 0;
 }
