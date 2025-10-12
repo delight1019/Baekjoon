@@ -25,18 +25,31 @@ int main() {
 	cin.tie(NULL);
 	cout.tie(NULL);
 	
-	int32 A, B, C, D;
-	cin >> A >> B >> C >> D;
+	int32 N, M;
+	cin >> N >> M;
 
-	if (A + C == B + D) {
-		cout << "Either";
+	int32 package = 1000;
+	int32 one = 1000;
+
+	for (int32 m = 0; m < M; m++) {
+		int32 p, o;
+		cin >> p >> o;
+
+		package = MIN(package, p);
+		one = MIN(one, o);
 	}
-	else if (A + C < B + D) {
-		cout << "Hanyang Univ.";
+
+	int32 ret = 1000 * N;
+
+	for (int32 i = 0; i <= (N / 6) + 1; i++) {
+		int32 temp = i * package;
+		if (N - i * 6 >= 0) {
+			temp += (N - i * 6) * one;
+		}
+		ret = MIN(ret, temp);
 	}
-	else {		
-		cout << "Yongdap";
-	}
+	
+	cout << ret;
 
 	return 0;
 }
