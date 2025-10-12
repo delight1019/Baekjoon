@@ -20,61 +20,23 @@ typedef unsigned char ubyte;
 #define MAX(a, b) a < b ? b : a;
 #define MIN(a, b) a < b ? a : b;
 
-const int32 MAX_N = 100000;
-
-int32 N, M;
-vector<int32> lectures;
-vector<int32> sums;
-
-bool IsPossible(int32 t) {
-	int32 c = 1;
-	vector<int32>::iterator it = upper_bound(sums.begin(), sums.end(), t);
-
-	while (it != sums.end()) {		
-		int32 temp = *(it - 1) + t;
-		it = upper_bound(it, sums.end(), temp);
-		c++;
-
-		if (c > M) return false;
-	}
-
-	return c <= M;
-}
-
-int32 solve(int32 lo, int32 hi) {
-	while (lo + 1 < hi) {
-		int32 mid = (lo + hi) / 2;
-
-		if (IsPossible(mid)) {
-			hi = mid;
-		}
-		else {
-			lo = mid;
-		}
-	}
-
-	return hi;
-}
-
 int main() {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
 	cout.tie(NULL);
 	
-	cin >> N >> M;
+	int32 A, B, C, D;
+	cin >> A >> B >> C >> D;
 
-	lectures.resize(N);
-	sums.resize(N + 1);
-
-	sums[0] = 0;
-
-	for (int32 n = 0; n < N; n++) {
-		cin >> lectures[n];
-
-		sums[n + 1] = sums[n] + lectures[n];
+	if (A + C == B + D) {
+		cout << "Either";
 	}
-
-	cout << solve(sums[0], sums[N]);
+	else if (A + C < B + D) {
+		cout << "Hanyang Univ.";
+	}
+	else {		
+		cout << "Yongdap";
+	}
 
 	return 0;
 }
