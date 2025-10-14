@@ -19,37 +19,64 @@ typedef unsigned char ubyte;
 
 #define MAX(a, b) a < b ? b : a;
 #define MIN(a, b) a < b ? a : b;
+#define ABS(a) a < 0 ? -a : a;
+
+struct Room {
+	int32 x;
+	int32 y;
+	int32 E;
+};
+
+Room rooms[1001];
+int32 energy[1001];
+
+int32 GetABS(int32 a) {
+	return a < 0 ? -a : a;
+}
+
+int32 GetEnergy(int32 source, int32 dest) {
+	int32 temp = rooms[source].E - GetABS(rooms[dest].x - rooms[source].x) - GetABS(rooms[dest].y - rooms[source].y);
+	return MAX(0, temp);
+}
 
 int main() {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
 	cout.tie(NULL);
 	
-	int32 N, M;
-	cin >> N >> M;
+	int32 N;
+	cin >> N;
 
-	int32 package = 1000;
-	int32 one = 1000;
-
-	for (int32 m = 0; m < M; m++) {
-		int32 p, o;
-		cin >> p >> o;
-
-		package = MIN(package, p);
-		one = MIN(one, o);
+	for (int32 n = 0; n <= N; n++) {
+		cin >> rooms[n].x;
+		cin >> rooms[n].y;
+		cin >> rooms[n].E;
 	}
 
-	int32 ret = 1000 * N;
+	for (int32 n = 1; n <= N; n++) {
+		energy[n] = GetEnergy(0, n);
+	}
 
-	for (int32 i = 0; i <= (N / 6) + 1; i++) {
-		int32 temp = i * package;
-		if (N - i * 6 >= 0) {
-			temp += (N - i * 6) * one;
+	for (int32 n = 1; n <= N; n++) {
+		if (rooms[n].E == 0) continue;
+
+		for (int32 x = 1; x <= N; x++) {
+			energy[x] -= GetEnergy(n, x);
 		}
-		ret = MIN(ret, temp);
 	}
-	
-	cout << ret;
+
+	int32 maxValue = 0;
+
+	for (int32 n = 1; n <= N; n++) {
+		maxValue = MAX(maxValue, energy[n]);
+	}
+
+	if (maxValue <= 0) {
+		cout << "IMPOSSIBLE";
+	}
+	else {
+		cout << maxValue;
+	}
 
 	return 0;
 }
