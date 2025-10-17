@@ -21,13 +21,21 @@ typedef unsigned char ubyte;
 #define MIN(a, b) a < b ? a : b
 #define ABS(a) a < 0 ? -a : a
 
-struct Query {
-	int32 oper;
-	int32 value;
+const int32 MAX_N = 100000;
 
-	Query(int32 o, int32 v) {
-		this->oper = o;
-		this->value = v;
+int32 N, M, R;
+vector<vector<int32>> graph;
+bool visited[MAX_N + 1];
+int64 depths[MAX_N + 1];
+int64 orders[MAX_N + 1];
+
+struct Node {
+	int32 index;
+	int32 d;
+
+	Node(int32 i, int32 d) {
+		this->index = i;
+		this->d = d;
 	}
 };
 
@@ -36,53 +44,53 @@ int main() {
 	cin.tie(NULL);
 	cout.tie(NULL);
 
-	stack<int32> calcStack;
-	stack<Query> queryStack;
+	cin >> N >> M >> R;
+	graph.resize(N + 1);
 
-	int32 Q;
-	cin >> Q;
+	for (int32 m = 0; m < M; m++) {
+		int32 u, v;
+		cin >> u >> v;
 
-	for (int32 q = 0; q < Q; q++) {
-		int32 oper, value;
-		cin >> oper;
+		graph[u].push_back(v);
+		graph[v].push_back(u);
+	}
 
-		if (oper == 1) {
-			cin >> value;
-			calcStack.push(value);
-			queryStack.push(Query(2, value));
-		}
-		else if (oper == 2) {
-			int32 value = calcStack.top();
-			calcStack.pop();
-			queryStack.push(Query(1, value));
-		}
-		else if (oper == 3) {
-			cin >> value;
+	for (int32 n = 1; n <= N; n++) {
+		sort(graph[n].begin(), graph[n].end());
+	}
 
-			for (int32 i = 0; i < value; i++) {
-				Query query = queryStack.top();
-				queryStack.pop();
+	memset(visited, false, sizeof(visited));
+	memset(depths, 0, sizeof(depths));
 
-				if (query.oper == 1) {
-					calcStack.push(query.value);
-				}
-				else if (query.oper == 2) {
-					calcStack.pop();
-				}
-			}
-		}
-		else if (oper == 4) {
-			cout << calcStack.size() << "\n";
-		}
-		else if (oper == 5) {
-			if (calcStack.empty()) {
-				cout << -1 << "\n";
-			}
-			else {
-				cout << calcStack.top() << "\n";
-			}
+	queue<Node> q;
+	q.push(Node(R, 0));	
+	visited[R] = true;
+	int32 order = 1;
+
+	while (!q.empty()) {
+		Node cur = q.front();
+		q.pop();
+
+		depths[cur.index] = cur.d;
+		orders[cur.index] = order++;
+
+		for (vector<int32>::iterator it = graph[cur.index].begin(); it != graph[cur.index].end(); it++) {
+			int32 next = *it;
+
+			if (visited[next]) continue;
+
+			q.push(Node(next, cur.d + 1));
+			visited[next] = true;
 		}
 	}
+
+	int64 ret = 0;
+
+	for (int32 n = 1; n <= N; n++) {
+		ret += orders[n] * depths[n];
+	}
+
+	cout << ret;
 
 	return 0;
 }
