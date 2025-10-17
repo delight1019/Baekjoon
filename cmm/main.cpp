@@ -21,76 +21,112 @@ typedef unsigned char ubyte;
 #define MIN(a, b) a < b ? a : b
 #define ABS(a) a < 0 ? -a : a
 
-const int32 MAX_N = 100000;
+const int32 MAX_VALUE = 1000;
 
-int32 N, M, R;
-vector<vector<int32>> graph;
-bool visited[MAX_N + 1];
-int64 depths[MAX_N + 1];
-int64 orders[MAX_N + 1];
+int32 ni, mj;
+char inputs[MAX_VALUE][MAX_VALUE];
 
-struct Node {
-	int32 index;
-	int32 d;
-
-	Node(int32 i, int32 d) {
-		this->index = i;
-		this->d = d;
+int32 GCD(int32 a, int32 b) {
+	if (a < b) {
+		int32 temp = a;
+		a = b;
+		b = temp;
 	}
-};
+
+	while (b > 0) {
+		int32 r = a % b;
+		a = b;
+		b = r;
+	}
+
+	return a;
+}
 
 int main() {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
 	cout.tie(NULL);
 
-	cin >> N >> M >> R;
-	graph.resize(N + 1);
+	cin >> ni >> mj;
 
-	for (int32 m = 0; m < M; m++) {
-		int32 u, v;
-		cin >> u >> v;
-
-		graph[u].push_back(v);
-		graph[v].push_back(u);
-	}
-
-	for (int32 n = 1; n <= N; n++) {
-		sort(graph[n].begin(), graph[n].end());
-	}
-
-	memset(visited, false, sizeof(visited));
-	memset(depths, 0, sizeof(depths));
-
-	queue<Node> q;
-	q.push(Node(R, 0));	
-	visited[R] = true;
-	int32 order = 1;
-
-	while (!q.empty()) {
-		Node cur = q.front();
-		q.pop();
-
-		depths[cur.index] = cur.d;
-		orders[cur.index] = order++;
-
-		for (vector<int32>::iterator it = graph[cur.index].begin(); it != graph[cur.index].end(); it++) {
-			int32 next = *it;
-
-			if (visited[next]) continue;
-
-			q.push(Node(next, cur.d + 1));
-			visited[next] = true;
+	for (int32 i = 0; i < ni; i++) {
+		for (int32 j = 0; j < mj; j++) {
+			char temp;
+			cin >> temp;
+			inputs[i][j] = temp;
 		}
 	}
 
-	int64 ret = 0;
+	vector<int32> tempN, tempM;
+	int32 preJ = 0;
+	int32 preI = 0;
+	int32 cur = 1;
 
-	for (int32 n = 1; n <= N; n++) {
-		ret += orders[n] * depths[n];
+	for (int32 j = 1; j < mj; j++) {
+		bool isOk = true;
+
+		for (int32 i = 0; i < ni; i++) {
+			if (inputs[i][preJ] != inputs[i][j]) {
+				isOk = false;
+				break;				
+			}			
+		}
+
+		if (isOk) {
+			cur++;
+		}
+		else {
+			tempM.push_back(cur);
+			preJ = j;
+			cur = 1;
+		}
 	}
 
-	cout << ret;
+	tempM.push_back(cur);
+	cur = 1;
+
+	for (int32 i = 1; i < ni; i++) {
+		bool isOk = true;
+
+		for (int32 j = 0; j < mj; j++) {
+			if (inputs[preI][j] != inputs[i][j]) {
+				isOk = false;
+				break;
+			}
+		}
+
+		if (isOk) {
+			cur++;
+		}
+		else {
+			tempN.push_back(cur);
+			preI = i;
+			cur = 1;
+		}
+	}
+
+	tempN.push_back(cur);
+
+	int32 I = tempN[0];
+	int32 J = tempM[0];
+
+	for (int32 i = 1; i < tempN.size(); i++) {
+		I = GCD(I, tempN[i]);
+	}
+
+	for (int32 j = 1; j < tempM.size(); j++) {
+		J = GCD(J, tempM[j]);
+	}
+
+	cout << ni / I << " " << mj / J << "\n";
+
+	for (int32 i = 0; i < ni; i += I) {
+		for (int32 j = 0; j < mj; j += J) {
+			cout << inputs[i][j];
+		}
+
+		cout << "\n";
+	}
 
 	return 0;
 }
