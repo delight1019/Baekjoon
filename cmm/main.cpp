@@ -20,26 +20,19 @@ typedef unsigned char ubyte;
 #define MAX(a, b) a < b ? b : a
 #define MIN(a, b) a < b ? a : b
 #define ABS(a) a < 0 ? -a : a
+#define ToNum(a) a - 'A'
 
-const int32 MAX_VALUE = 1000;
+int32 chars[26];
+int32 nums[10];
 
-int32 ni, mj;
-char inputs[MAX_VALUE][MAX_VALUE];
+const string NUMBERS[10] = { "ZERO", "ONE", "TWO", "THREE", "FOUR", "FIVE", "SIX", "SEVEN", "EIGHT", "NINE"};
 
-int32 GCD(int32 a, int32 b) {
-	if (a < b) {
-		int32 temp = a;
-		a = b;
-		b = temp;
+void erase(int32 num) {
+	string v = NUMBERS[num];
+
+	for (int32 i = 0; i < v.length(); i++) {
+		chars[ToNum(v[i])] -= nums[num];
 	}
-
-	while (b > 0) {
-		int32 r = a % b;
-		a = b;
-		b = r;
-	}
-
-	return a;
 }
 
 int main() {
@@ -47,82 +40,56 @@ int main() {
 	cin.tie(NULL);
 	cout.tie(NULL);
 
-	cin >> ni >> mj;
+	int32 T;
+	cin >> T;
 
-	for (int32 i = 0; i < ni; i++) {
-		for (int32 j = 0; j < mj; j++) {
-			char temp;
-			cin >> temp;
-			inputs[i][j] = temp;
-		}
-	}
+	for (int32 testCase = 1; testCase <= T; testCase++) {
+		string input;
+		cin >> input;
 
-	vector<int32> tempN, tempM;
-	int32 preJ = 0;
-	int32 preI = 0;
-	int32 cur = 1;
+		memset(chars, 0, sizeof(chars));
+		memset(nums, 0, sizeof(nums));
 
-	for (int32 j = 1; j < mj; j++) {
-		bool isOk = true;
-
-		for (int32 i = 0; i < ni; i++) {
-			if (inputs[i][preJ] != inputs[i][j]) {
-				isOk = false;
-				break;				
-			}			
+		for (int32 i = 0; i < input.length(); i++) {
+			chars[input[i] - 'A']++;
 		}
 
-		if (isOk) {
-			cur++;
-		}
-		else {
-			tempM.push_back(cur);
-			preJ = j;
-			cur = 1;
-		}
-	}
+		nums[0] += chars[ToNum('Z')];
+		erase(0);
 
-	tempM.push_back(cur);
-	cur = 1;
+		nums[6] += chars[ToNum('X')];
+		erase(6);
+		
+		nums[2] += chars[ToNum('W')];
+		erase(2);
 
-	for (int32 i = 1; i < ni; i++) {
-		bool isOk = true;
+		nums[8] += chars[ToNum('G')];
+		erase(8);
 
-		for (int32 j = 0; j < mj; j++) {
-			if (inputs[preI][j] != inputs[i][j]) {
-				isOk = false;
-				break;
+		nums[3] += chars[ToNum('T')];
+		erase(3);
+
+		nums[7] += chars[ToNum('S')];
+		erase(7);
+
+		nums[5] += chars[ToNum('V')];
+		erase(5);
+
+		nums[4] += chars[ToNum('F')];
+		erase(4);
+
+		nums[1] += chars[ToNum('O')];
+		erase(1);
+
+		nums[9] += chars[ToNum('I')];
+		erase(9);
+
+		cout << "Case #" << testCase << ": ";
+
+		for (int32 i = 0; i <= 9; i++) {
+			for (int32 j = 0; j < nums[i]; j++) {
+				cout << i;
 			}
-		}
-
-		if (isOk) {
-			cur++;
-		}
-		else {
-			tempN.push_back(cur);
-			preI = i;
-			cur = 1;
-		}
-	}
-
-	tempN.push_back(cur);
-
-	int32 I = tempN[0];
-	int32 J = tempM[0];
-
-	for (int32 i = 1; i < tempN.size(); i++) {
-		I = GCD(I, tempN[i]);
-	}
-
-	for (int32 j = 1; j < tempM.size(); j++) {
-		J = GCD(J, tempM[j]);
-	}
-
-	cout << ni / I << " " << mj / J << "\n";
-
-	for (int32 i = 0; i < ni; i += I) {
-		for (int32 j = 0; j < mj; j += J) {
-			cout << inputs[i][j];
 		}
 
 		cout << "\n";
