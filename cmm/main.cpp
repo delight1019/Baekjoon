@@ -22,77 +22,129 @@ typedef unsigned char ubyte;
 #define ABS(a) a < 0 ? -a : a
 #define ToNum(a) a - 'A'
 
-int32 chars[26];
-int32 nums[10];
+const int32 MAX_N = 20;
 
-const string NUMBERS[10] = { "ZERO", "ONE", "TWO", "THREE", "FOUR", "FIVE", "SIX", "SEVEN", "EIGHT", "NINE"};
+int32 N, M;
+int32 x, y;
+int32 K;
 
-void erase(int32 num) {
-	string v = NUMBERS[num];
+int32 numMap[MAX_N][MAX_N];
 
-	for (int32 i = 0; i < v.length(); i++) {
-		chars[ToNum(v[i])] -= nums[num];
+struct Dice {
+	int32 x;
+	int32 y;
+	int32 top;
+	int32 bottom;
+	int32 north;
+	int32 south;
+	int32 west;
+	int32 east;
+
+	Dice(int32 x, int32 y, int32 t, int32 b, int32 n, int32 s, int32 w, int32 e) {
+		this->x = x;
+		this->y = y;
+		this->top = t;
+		this->bottom = b;
+		this->north = n;
+		this->south = s;
+		this->west = w;
+		this->east = e;
 	}
-}
+
+	void CheckBottom() {
+		if (numMap[x][y] == 0) {
+			numMap[x][y] = bottom;
+		}
+		else {
+			bottom = numMap[x][y];
+			numMap[x][y] = 0;
+		}
+	}
+
+	void RollEast() {
+		y++;
+		int32 temp = top;
+		top = west;
+		west = bottom;
+		bottom = east;
+		east = temp;
+
+		CheckBottom();
+	}
+
+	void RollWest() {
+		y--;
+		int32 temp = top;
+		top = east;
+		east = bottom;
+		bottom = west;
+		west = temp;
+
+		CheckBottom();
+	}
+
+	void RollNorth() {
+		x--;
+		int32 temp = top;
+		top = south;
+		south = bottom;
+		bottom = north;
+		north = temp;
+
+		CheckBottom();
+	}
+
+	void RollSouth() {
+		x++;
+		int32 temp = top;
+		top = north;
+		north = bottom;
+		bottom = south;
+		south = temp;
+
+		CheckBottom();
+	}
+};
 
 int main() {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
 	cout.tie(NULL);
 
-	int32 T;
-	cin >> T;
+	cin >> N >> M;
+	cin >> x >> y;
+	cin >> K;
 
-	for (int32 testCase = 1; testCase <= T; testCase++) {
-		string input;
-		cin >> input;
+	for (int32 n = 0; n < N; n++) {
+		for (int32 m = 0; m < M; m++) {
+			cin >> numMap[n][m];
+		}
+	}
 
-		memset(chars, 0, sizeof(chars));
-		memset(nums, 0, sizeof(nums));
+	Dice dice(x, y, 0, 0, 0, 0, 0, 0);
 
-		for (int32 i = 0; i < input.length(); i++) {
-			chars[input[i] - 'A']++;
+	for (int32 k = 0; k < K; k++) {
+		int32 arg;
+		cin >> arg;
+
+		if (arg == 1) {
+			if (dice.y == M - 1) continue;
+			dice.RollEast();
+		}
+		else if (arg == 2) {
+			if (dice.y == 0) continue;
+			dice.RollWest();
+		}
+		else if (arg == 3) {
+			if (dice.x == 0) continue;
+			dice.RollNorth();
+		}
+		else if (arg == 4) {
+			if (dice.x == N - 1) continue;
+			dice.RollSouth();
 		}
 
-		nums[0] += chars[ToNum('Z')];
-		erase(0);
-
-		nums[6] += chars[ToNum('X')];
-		erase(6);
-		
-		nums[2] += chars[ToNum('W')];
-		erase(2);
-
-		nums[8] += chars[ToNum('G')];
-		erase(8);
-
-		nums[3] += chars[ToNum('T')];
-		erase(3);
-
-		nums[7] += chars[ToNum('S')];
-		erase(7);
-
-		nums[5] += chars[ToNum('V')];
-		erase(5);
-
-		nums[4] += chars[ToNum('F')];
-		erase(4);
-
-		nums[1] += chars[ToNum('O')];
-		erase(1);
-
-		nums[9] += chars[ToNum('I')];
-		erase(9);
-
-		cout << "Case #" << testCase << ": ";
-
-		for (int32 i = 0; i <= 9; i++) {
-			for (int32 j = 0; j < nums[i]; j++) {
-				cout << i;
-			}
-		}
-
-		cout << "\n";
+		cout << dice.top << "\n";
 	}
 
 	return 0;
