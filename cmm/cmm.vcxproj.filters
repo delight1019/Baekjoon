@@ -207,5 +207,8 @@
     <ClCompile Include="14499.cpp">
       <Filter>solved</Filter>
     </ClCompile>
+    <ClCompile Include="26145.cpp">
+      <Filter>solved</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
