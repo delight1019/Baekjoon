@@ -21,32 +21,38 @@ typedef unsigned char ubyte;
 #define MIN(a, b) a < b ? a : b
 #define ABS(a) a < 0 ? -a : a
 
-int32 N, M;
-int32 pays[2001] = { 0, };
-int32 T[1001][2001];
+bool InRange(int32 v, int32 m, int32 M) {
+	return m <= v && v < M;
+}
 
 int main() {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
 	cout.tie(NULL);
 
-	cin >> N >> M;
+	int waveLength;
+	cin >> waveLength;
 
-	for (int32 n = 1; n <= N; n++) {
-		cin >> pays[n];
+	if (InRange(waveLength, 620, 780) || waveLength == 780) {
+		cout << "Red";
 	}
-
-	for (int32 n = 1; n <= N; n++) {
-		for (int32 m = 1; m <= N + M; m++) {
-			cin >> T[n][m];
-
-			pays[n] -= T[n][m];
-			pays[m] += T[n][m];
-		}
+	else if (InRange(waveLength, 590, 620)) {
+		cout << "Orange";
 	}
-
-	for (int32 i = 1; i <= N + M; i++) {
-		cout << pays[i] << " ";
+	else if (InRange(waveLength, 570, 590)) {
+		cout << "Yellow";
+	}
+	else if (InRange(waveLength, 495, 570)) {
+		cout << "Green";
+	}
+	else if (InRange(waveLength, 450, 495)) {
+		cout << "Blue";
+	}
+	else if (InRange(waveLength, 425, 450)) {
+		cout << "Indigo";
+	}
+	else if (InRange(waveLength, 380, 425)) {
+		cout << "Violet";
 	}
 
 	return 0;
