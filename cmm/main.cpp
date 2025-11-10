@@ -26,10 +26,24 @@ int main() {
 	cin.tie(NULL);
 	cout.tie(NULL);
 
-	int32 N, M, K;
-	cin >> N >> M >> K;
+	int32 R, C, ZR, ZC;
 
-	cout << (M / N) * K;
+	cin >> R >> C >> ZR >> ZC;
+
+	for (int32 r = 0; r < R; r++) {
+		string input;
+		cin >> input;
+
+		for (int32 zr = 0; zr < ZR; zr++) {
+			for (int32 c = 0; c < C; c++) {
+				for (int32 zc = 0; zc < ZC; zc++) {
+					cout << input[c];
+				}
+			}
+
+			cout << "\n";
+		}
+	}
 
 	return 0;
 }
