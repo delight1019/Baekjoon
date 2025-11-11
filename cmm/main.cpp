@@ -26,22 +26,40 @@ int main() {
 	cin.tie(NULL);
 	cout.tie(NULL);
 
-	int32 R, C, ZR, ZC;
+	string input;
+	cin >> input;
 
-	cin >> R >> C >> ZR >> ZC;
+	if (input == "0") {
+		cout << 0;
+		return 0;
+	}
 
-	for (int32 r = 0; r < R; r++) {
-		string input;
-		cin >> input;
+	bool isWritten = false;
 
-		for (int32 zr = 0; zr < ZR; zr++) {
-			for (int32 c = 0; c < C; c++) {
-				for (int32 zc = 0; zc < ZC; zc++) {
-					cout << input[c];
-				}
-			}
+	for (int32 i = 0; i < input.length(); i++) {
+		int32 cur = input[i] - '0';
 
-			cout << "\n";
+		int32 temp = cur / 4;
+
+		if (isWritten || temp == 1) {
+			cout << temp;
+			isWritten = true;
+		}
+
+		cur %= 4;
+		temp = cur / 2;
+
+		if (isWritten || temp == 1) {
+			cout << temp;
+			isWritten = true;
+		}
+
+		cur %= 2;
+		temp = cur;
+		
+		if (isWritten || temp == 1) {
+			cout << temp;
+			isWritten = true;
 		}
 	}
 
