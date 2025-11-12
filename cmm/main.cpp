@@ -26,41 +26,22 @@ int main() {
 	cin.tie(NULL);
 	cout.tie(NULL);
 
-	string input;
-	cin >> input;
+	int32 N;
+	cin >> N;
 
-	if (input == "0") {
-		cout << 0;
-		return 0;
-	}
+	for (int32 n = 0; n < N; n++) {
+		int32 M = N + n;
 
-	bool isWritten = false;
-
-	for (int32 i = 0; i < input.length(); i++) {
-		int32 cur = input[i] - '0';
-
-		int32 temp = cur / 4;
-
-		if (isWritten || temp == 1) {
-			cout << temp;
-			isWritten = true;
+		for (int32 m = 1; m <= M; m++) {
+			if (m == (N - n) || m == (N + n)) {
+				cout << '*';
+			}
+			else {
+				cout << ' ';
+			}
 		}
 
-		cur %= 4;
-		temp = cur / 2;
-
-		if (isWritten || temp == 1) {
-			cout << temp;
-			isWritten = true;
-		}
-
-		cur %= 2;
-		temp = cur;
-		
-		if (isWritten || temp == 1) {
-			cout << temp;
-			isWritten = true;
-		}
+		cout << "\n";
 	}
 
 	return 0;
