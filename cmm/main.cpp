@@ -21,79 +21,43 @@ typedef unsigned char ubyte;
 #define MIN(a, b) a < b ? a : b
 #define ABS(a) a < 0 ? -a : a
 
-const int DELTA_R[4] = { 1, -1, 0, 0 };
-const int DELTA_C[4] = { 0, 0, 1, -1 };
+const int32 MAX_VALUE = 100000000;
 
-char candies[50][50];
+int32 P[10001];
+int32 N;
+
+int32 cache[10001];
+
+int32 calculate(int32 n) {
+	if (n <= 0) return 0;
+
+	int32& ret = cache[n];
+
+	if (ret != -1) return ret;
+
+	ret = P[n];
+
+	for (int32 i = 1; i <= n; i++) {
+		ret = MIN(ret, P[i] + calculate(n - i));
+	}
+
+	return ret;
+}
 
 int main() {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
 	cout.tie(NULL);
 
-	int32 N;
+	memset(cache, -1, sizeof(cache));
+
 	cin >> N;
 
-	for (int i = 0; i < N; i++) {
-		for (int j = 0; j < N; j++) {
-			cin >> candies[i][j];
-		}
+	for (int32 n = 1; n <= N; n++) {
+		cin >> P[n];
 	}
 
-	int32 ret = 0;
-
-	for (int i = 0; i < N; i++) {
-		for (int j = 0; j < N; j++) {
-			for (int k = 0; k < 4; k++) {
-				int r = i + DELTA_R[k];
-				int c = j + DELTA_C[k];
-
-				if (r >= 0 && r < N && c >= 0 && c < N) {
-					char prev = candies[i][j];
-					char cur = candies[r][c];
-
-					candies[i][j] = cur;
-					candies[r][c] = prev;
-
-					int row = 1;
-					int col = 1;
-
-					for (int tr = i - 1; tr >= 0; tr--) {
-						if (candies[tr][j] == cur) {
-							row++;
-						}
-						else break;
-					}
-
-					for (int tr = i + 1; tr < N; tr++) {
-						if (candies[tr][j] == cur) {
-							row++;
-						}
-						else break;
-					}
-
-					for (int tc = j - 1; tc >= 0; tc--) {
-						if (candies[i][tc] == cur) {
-							col++;
-						}
-						else break;
-					}
-					for (int tc = j + 1; tc < N; tc++) {
-						if (candies[i][tc] == cur) {
-							col++;
-						}
-						else break;
-					}
-
-					candies[i][j] = prev;
-					candies[r][c] = cur;
-
-					ret = MAX(ret, row);
-					ret = MAX(ret, col);
-				}
-			}
-		}
-	}
+	int32 ret = calculate(N);
 
 	cout << ret;
 
