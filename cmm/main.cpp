@@ -21,45 +21,35 @@ typedef unsigned char ubyte;
 #define MIN(a, b) a < b ? a : b
 #define ABS(a) a < 0 ? -a : a
 
-const int32 MAX_VALUE = 100000000;
-
-int32 P[10001];
-int32 N;
-
-int32 cache[10001];
-
-int32 calculate(int32 n) {
-	if (n <= 0) return 0;
-
-	int32& ret = cache[n];
-
-	if (ret != -1) return ret;
-
-	ret = P[n];
-
-	for (int32 i = 1; i <= n; i++) {
-		ret = MIN(ret, P[i] + calculate(n - i));
-	}
-
-	return ret;
-}
+int64 cache[1000001] = { 0, };
+int64 sum[1000001] = { 0, };
 
 int main() {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
 	cout.tie(NULL);
 
-	memset(cache, -1, sizeof(cache));
+	for (int32 i = 1; i <= 1000000; i++) {
+		for (int32 j = 1; j <= 1000000; j++) {
+			if (i * j > 1000000) break;
 
-	cin >> N;
-
-	for (int32 n = 1; n <= N; n++) {
-		cin >> P[n];
+			cache[i * j] += i;
+		}
 	}
 
-	int32 ret = calculate(N);
+	for (int32 i = 1; i <= 1000000; i++) {
+		sum[i] = sum[i - 1] + cache[i];
+	}
 
-	cout << ret;
+	int32 T;
+	cin >> T;
 
+	for (int32 testCase = 1; testCase <= T; testCase++) {
+		int32 N;
+		cin >> N;
+
+		cout << sum[N] << "\n";
+	}
+	
 	return 0;
 }
