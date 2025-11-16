@@ -21,35 +21,60 @@ typedef unsigned char ubyte;
 #define MIN(a, b) a < b ? a : b
 #define ABS(a) a < 0 ? -a : a
 
-int64 cache[1000001] = { 0, };
-int64 sum[1000001] = { 0, };
+const int32 MAX_VALUE = 1000000;
+
+bool cache[1000001] = { false, };
+vector<int32> primeNumbers;
+
+void calculatePrimes() {
+	for (int32 i = 2; i <= MAX_VALUE; i += 2) {
+		cache[i] = true;
+	}
+
+	int32 i = 3;
+
+	while (i <= MAX_VALUE) {
+		primeNumbers.push_back(i);
+
+		for (int32 j = 1; i * j <= MAX_VALUE; j++) {
+			cache[i * j] = true;
+		}
+
+		while (cache[i] && i <= MAX_VALUE) i++;
+	}
+}
 
 int main() {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
 	cout.tie(NULL);
 
-	for (int32 i = 1; i <= 1000000; i++) {
-		for (int32 j = 1; j <= 1000000; j++) {
-			if (i * j > 1000000) break;
+	calculatePrimes();
 
-			cache[i * j] += i;
-		}
-	}
-
-	for (int32 i = 1; i <= 1000000; i++) {
-		sum[i] = sum[i - 1] + cache[i];
-	}
-
-	int32 T;
-	cin >> T;
-
-	for (int32 testCase = 1; testCase <= T; testCase++) {
+	while (true) {
 		int32 N;
 		cin >> N;
 
-		cout << sum[N] << "\n";
+		if (N == 0) break;
+
+		bool isPossible = false;
+
+		for (vector<int32>::iterator it = primeNumbers.begin(); it != primeNumbers.end(); it++) {
+			int32 cur = *it;
+
+			if (cur > N / 2) break;
+
+			if (binary_search(it, primeNumbers.end(), N - cur)) {
+				cout << N << " = " << cur << " + " << N - cur << "\n";
+				isPossible = true;
+				break;
+			}
+		}
+
+		if (false == isPossible) {
+			cout << "Goldbach's conjecture is wrong." << "\n";
+		}
 	}
-	
+
 	return 0;
 }
