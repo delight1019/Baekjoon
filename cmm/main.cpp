@@ -21,32 +21,52 @@ typedef unsigned char ubyte;
 #define MIN(a, b) a < b ? a : b
 #define ABS(a) a < 0 ? -a : a
 
+const int32 MAX_N = 100000;
+const int32 DEVIDE = 9901;
+
+int32 cache[3][MAX_N + 1];
+
+int32 calculate(int32 pre, int32 n) {
+	if (n == 0) return 1;
+
+	int32& ret = cache[pre][n];
+
+	if (ret != -1) {
+		return ret;
+	}
+
+	if (pre == 0) {
+		ret = calculate(0, n - 1) % DEVIDE;
+		ret += calculate(1, n - 1) % DEVIDE;
+		ret %= DEVIDE;
+		ret += calculate(2, n - 1) % DEVIDE;
+		ret %= DEVIDE;		
+	}
+	else if (pre == 1) {
+		ret = calculate(2, n - 1) % DEVIDE;
+		ret += calculate(0, n - 1) % DEVIDE;
+		ret %= DEVIDE;
+	}
+	else if (pre == 2) {
+		ret = calculate(1, n - 1) % DEVIDE;
+		ret += calculate(0, n - 1) % DEVIDE;
+		ret %= DEVIDE;
+	}
+
+	return ret;
+}      
+
 int main() {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
 	cout.tie(NULL);
 
-	uint64 N;
+	memset(cache, -1, sizeof(cache));
+
+	int32 N;
 	cin >> N;
 
-	uint64 ret = 0;
-	uint64 temp = 10;
-	uint64 j = 1;
-
-	while (true) {
-		if (temp <= N) {
-			ret += (temp - (temp / 10)) * j;
-		}
-		else {
-			ret += (N - (temp / 10 - 1)) * j;
-			break;
-		}
-
-		j++;
-		temp *= 10;
-	}
-
-	cout << ret;
+	cout << calculate(0, N);
 
 	return 0;
 }
