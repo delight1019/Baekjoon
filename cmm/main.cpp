@@ -21,52 +21,81 @@ typedef unsigned char ubyte;
 #define MIN(a, b) a < b ? a : b
 #define ABS(a) a < 0 ? -a : a
 
-const int32 MAX_N = 100000;
-const int32 DEVIDE = 9901;
+struct Score {
+	int32 id;
+	int32 A;
+	int32 B;
+};
 
-int32 cache[3][MAX_N + 1];
+int sortByA(Score& a, Score& b) {
+	if (a.A == b.A) return a.B < b.B;
 
-int32 calculate(int32 pre, int32 n) {
-	if (n == 0) return 1;
+	return a.A < b.A;
+}
 
-	int32& ret = cache[pre][n];
+int sortByB(Score& a, Score& b) {
+	if (a.B == b.B) return a.A < b.A;
 
-	if (ret != -1) {
-		return ret;
-	}
+	return a.B < b.B;
+}
 
-	if (pre == 0) {
-		ret = calculate(0, n - 1) % DEVIDE;
-		ret += calculate(1, n - 1) % DEVIDE;
-		ret %= DEVIDE;
-		ret += calculate(2, n - 1) % DEVIDE;
-		ret %= DEVIDE;		
-	}
-	else if (pre == 1) {
-		ret = calculate(2, n - 1) % DEVIDE;
-		ret += calculate(0, n - 1) % DEVIDE;
-		ret %= DEVIDE;
-	}
-	else if (pre == 2) {
-		ret = calculate(1, n - 1) % DEVIDE;
-		ret += calculate(0, n - 1) % DEVIDE;
-		ret %= DEVIDE;
-	}
-
-	return ret;
-}      
+vector<Score> scores;
+bool isSelected[100000];
 
 int main() {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
 	cout.tie(NULL);
 
-	memset(cache, -1, sizeof(cache));
+	int32 T;
+	cin >> T;
 
-	int32 N;
-	cin >> N;
+	for (int32 testCase = 1; testCase <= T; testCase++) {
+		memset(isSelected, false, sizeof(isSelected));
+		scores.clear();
 
-	cout << calculate(0, N);
+		int32 N;
+		cin >> N;
+
+		for (int32 n = 0; n < N; n++) {
+			Score s;
+			s.id = n;
+			cin >> s.A >> s.B;
+			scores.push_back(s);
+		}
+
+		sort(scores.begin(), scores.end(), sortByA);
+
+		isSelected[scores[0].id] = true;
+		int32 minB = scores[0].B;
+
+		for (int32 i = 1; i < N; i++) {
+			if (scores[i].B > minB) continue;
+
+			isSelected[scores[i].id] = true;
+			minB = MIN(minB, scores[i].B);
+		}
+
+		sort(scores.begin(), scores.end(), sortByB);
+
+		isSelected[scores[0].id] = true;
+		int32 minA = scores[0].A;
+
+		for (int32 i = 1; i < N; i++) {
+			if (scores[i].A > minA) continue;
+
+			isSelected[scores[i].id] = true;
+			minA = MIN(minA, scores[i].A);
+		}
+
+		int32 ret = 0;
+
+		for (int32 i = 0; i < N; i++) {
+			if (isSelected[i]) ret++;
+		}
+
+		cout << ret << "\n";
+	}
 
 	return 0;
 }
