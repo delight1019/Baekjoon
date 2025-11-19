@@ -21,81 +21,43 @@ typedef unsigned char ubyte;
 #define MIN(a, b) a < b ? a : b
 #define ABS(a) a < 0 ? -a : a
 
-struct Score {
-	int32 id;
-	int32 A;
-	int32 B;
-};
+const int32 MAX_N = 1000;
+const int32 MAX_M = 1000;
 
-int sortByA(Score& a, Score& b) {
-	if (a.A == b.A) return a.B < b.B;
+int32 cache[MAX_N][MAX_M];
+int32 candies[MAX_N][MAX_M];
 
-	return a.A < b.A;
+int32 N, M;
+
+int32 calculate(int32 n, int32 m) {
+	if (n == N || m == M) return 0;
+
+	int32& ret = cache[n][m];
+
+	if (ret != -1) return ret;
+
+	ret = MAX(ret, candies[n][m] + calculate(n + 1, m));
+	ret = MAX(ret, candies[n][m] + calculate(n, m + 1));
+	ret = MAX(ret, candies[n][m] + calculate(n + 1, m + 1));
+
+	return ret;
 }
-
-int sortByB(Score& a, Score& b) {
-	if (a.B == b.B) return a.A < b.A;
-
-	return a.B < b.B;
-}
-
-vector<Score> scores;
-bool isSelected[100000];
 
 int main() {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
 	cout.tie(NULL);
 
-	int32 T;
-	cin >> T;
+	memset(cache, -1, sizeof(cache));
+	cin >> N >> M;
 
-	for (int32 testCase = 1; testCase <= T; testCase++) {
-		memset(isSelected, false, sizeof(isSelected));
-		scores.clear();
-
-		int32 N;
-		cin >> N;
-
-		for (int32 n = 0; n < N; n++) {
-			Score s;
-			s.id = n;
-			cin >> s.A >> s.B;
-			scores.push_back(s);
+	for (int32 n = 0; n < N; n++) {
+		for (int32 m = 0; m < M; m++) {
+			cin >> candies[n][m];
 		}
-
-		sort(scores.begin(), scores.end(), sortByA);
-
-		isSelected[scores[0].id] = true;
-		int32 minB = scores[0].B;
-
-		for (int32 i = 1; i < N; i++) {
-			if (scores[i].B > minB) continue;
-
-			isSelected[scores[i].id] = true;
-			minB = MIN(minB, scores[i].B);
-		}
-
-		sort(scores.begin(), scores.end(), sortByB);
-
-		isSelected[scores[0].id] = true;
-		int32 minA = scores[0].A;
-
-		for (int32 i = 1; i < N; i++) {
-			if (scores[i].A > minA) continue;
-
-			isSelected[scores[i].id] = true;
-			minA = MIN(minA, scores[i].A);
-		}
-
-		int32 ret = 0;
-
-		for (int32 i = 0; i < N; i++) {
-			if (isSelected[i]) ret++;
-		}
-
-		cout << ret << "\n";
 	}
+
+	cout << calculate(0, 0);
 
 	return 0;
 }
