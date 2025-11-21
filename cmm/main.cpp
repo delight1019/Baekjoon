@@ -21,24 +21,29 @@ typedef unsigned char ubyte;
 #define MIN(a, b) a < b ? a : b
 #define ABS(a) a < 0 ? -a : a
 
-const int32 MAX_N = 1000;
-const int32 MAX_M = 1000;
+const int32 MAX_N = 100;
 
-int32 cache[MAX_N][MAX_M];
-int32 candies[MAX_N][MAX_M];
+int64 board[MAX_N][MAX_N];
+int64 cache[MAX_N][MAX_N];
 
-int32 N, M;
+int32 N;
 
-int32 calculate(int32 n, int32 m) {
-	if (n == N || m == M) return 0;
+int64 calculate(int32 r, int32 c) {
+	if (r >= N || c >= N) return 0;
+	if (r == N - 1 && c == N - 1) return 1;
 
-	int32& ret = cache[n][m];
+	int64& ret = cache[r][c];
 
 	if (ret != -1) return ret;
 
-	ret = MAX(ret, candies[n][m] + calculate(n + 1, m));
-	ret = MAX(ret, candies[n][m] + calculate(n, m + 1));
-	ret = MAX(ret, candies[n][m] + calculate(n + 1, m + 1));
+	if (board[r][c] == 0) {
+		ret = 0;
+	}
+	else {
+		int64 next = board[r][c];
+		ret = calculate(r + next, c);
+		ret += calculate(r, c + next);
+	}
 
 	return ret;
 }
@@ -49,11 +54,11 @@ int main() {
 	cout.tie(NULL);
 
 	memset(cache, -1, sizeof(cache));
-	cin >> N >> M;
+	cin >> N;
 
 	for (int32 n = 0; n < N; n++) {
-		for (int32 m = 0; m < M; m++) {
-			cin >> candies[n][m];
+		for (int32 m = 0; m < N; m++) {
+			cin >> board[n][m];
 		}
 	}
 
