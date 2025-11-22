@@ -21,29 +21,24 @@ typedef unsigned char ubyte;
 #define MIN(a, b) a < b ? a : b
 #define ABS(a) a < 0 ? -a : a
 
-const int32 MAX_N = 100;
+int32 calculate(string n) {
+	int32 ret = 0;
+	
+	for (int32 i = 0; i < n.length(); i++) {
+		ret += n[i] - '0';
+	}
 
-int64 board[MAX_N][MAX_N];
-int64 cache[MAX_N][MAX_N];
+	if (ret < 10) return ret;
 
-int32 N;
-
-int64 calculate(int32 r, int32 c) {
-	if (r >= N || c >= N) return 0;
-	if (r == N - 1 && c == N - 1) return 1;
-
-	int64& ret = cache[r][c];
-
-	if (ret != -1) return ret;
-
-	if (board[r][c] == 0) {
+	while (ret >= 10) {
+		int32 temp = ret;
 		ret = 0;
-	}
-	else {
-		int64 next = board[r][c];
-		ret = calculate(r + next, c);
-		ret += calculate(r, c + next);
-	}
+
+		while (temp > 0) {
+			ret += (temp % 10);
+			temp /= 10;
+		}
+	}	
 
 	return ret;
 }
@@ -53,16 +48,14 @@ int main() {
 	cin.tie(NULL);
 	cout.tie(NULL);
 
-	memset(cache, -1, sizeof(cache));
-	cin >> N;
+	while (true) {
+		string N;
+		cin >> N;
 
-	for (int32 n = 0; n < N; n++) {
-		for (int32 m = 0; m < N; m++) {
-			cin >> board[n][m];
-		}
+		if (N == "0") break;
+
+		cout << calculate(N) << "\n";
 	}
-
-	cout << calculate(0, 0);
 
 	return 0;
 }
