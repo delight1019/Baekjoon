@@ -21,40 +21,59 @@ typedef unsigned char ubyte;
 #define MIN(a, b) a < b ? a : b
 #define ABS(a) a < 0 ? -a : a
 
-int32 calculate(string n) {
-	int32 ret = 0;
-	
-	for (int32 i = 0; i < n.length(); i++) {
-		ret += n[i] - '0';
-	}
+const int32 MAX_N = 100;
 
-	if (ret < 10) return ret;
-
-	while (ret >= 10) {
-		int32 temp = ret;
-		ret = 0;
-
-		while (temp > 0) {
-			ret += (temp % 10);
-			temp /= 10;
-		}
-	}	
-
-	return ret;
-}
+int32 switches[MAX_N + 1];
 
 int main() {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
 	cout.tie(NULL);
 
-	while (true) {
-		string N;
-		cin >> N;
+	int32 N;
+	cin >> N;
 
-		if (N == "0") break;
+	for (int32 n = 1; n <= N; n++) {
+		cin >> switches[n];
+	}
 
-		cout << calculate(N) << "\n";
+	int32 students;
+	cin >> students;
+
+	for (int32 s = 0; s < students; s++) {
+		int32 gender, num;
+		cin >> gender >> num;
+
+		if (gender == 1) {
+			int32 temp = num;
+
+			while (temp <= N) {
+				switches[temp] = 1 - switches[temp];
+				temp += num;
+			}
+		}
+		else {
+			int32 temp = 1;
+
+			while (true) {
+				if (num + temp > N || num - temp <= 0) break;
+				if (switches[num + temp] != switches[num - temp]) break;
+
+				temp++;
+			}
+
+			for (int32 i = num - temp + 1; i < num + temp; i++) {
+				switches[i] = 1 - switches[i];
+			}
+		}
+	}
+
+	for (int32 n = 1; n <= N; n++) {
+		cout << switches[n] << " ";
+		
+		if (n % 20 == 0) {
+			cout << "\n";
+		}
 	}
 
 	return 0;
