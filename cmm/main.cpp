@@ -17,32 +17,26 @@ typedef unsigned char ubyte;
 #define MIN(a, b) a < b ? a : b
 #define ABS(a) a < 0 ? -a : a
 
+
 int main() {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
 	cout.tie(NULL);
 
-	int32 N;
-	double current;
-	double gg, gb, bg, bb;
+	uint64 N, F;
+	cin >> N >> F;
 
-	cin >> N >> current;
-	cin >> gg >> gb >> bg >> bb;
+	N -= (N % 100);
 
-	double g = 1 - current;
-	double b = current;
-
-	for (int32 n = 0; n < N; n++) {
-		double tg = g;
-		double tb = b;
-
-		g = tg * gg + tb * bg;
-		b = tg * gb + tb * bb;
+	for (uint64 n = 0; n < 100; n++) {
+		if ((N + n) % F == 0) {
+			if (n < 10) {
+				cout << 0;
+			}
+			cout << n;
+			break;
+		}
 	}
-
-	
-	cout << round(g * 1000) << "\n";
-	cout << round(b * 1000) << "\n";
 
 	return 0;
 }
