@@ -23,18 +23,23 @@ int main() {
 	cin.tie(NULL);
 	cout.tie(NULL);
 
-	uint64 N, F;
-	cin >> N >> F;
+	int32 T;
+	cin >> T;
 
-	N -= (N % 100);
+	for (int32 testCase = 1; testCase <= T; testCase++) {
+		uint64 n, m;
+		cin >> n >> m;
 
-	for (uint64 n = 0; n < 100; n++) {
-		if ((N + n) % F == 0) {
-			if (n < 10) {
-				cout << 0;
-			}
-			cout << n;
-			break;
+		if (n == 1 || m == 1) {
+			cout << "YES" << "\n";
+			continue;
+		}
+
+		if ((n + m - 4) % 2 == 0) {
+			cout << "NO" << "\n";
+		}
+		else {
+			cout << "YES" << "\n";
 		}
 	}
 
