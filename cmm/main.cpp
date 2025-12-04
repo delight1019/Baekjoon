@@ -18,27 +18,125 @@ typedef unsigned char ubyte;
 #define MIN(a, b) a < b ? a : b
 #define ABS(a) a < 0 ? -a : a
 
-typedef int64 INT;
+typedef int32 INT;
+
+bool isWendy[15];
 
 int main() {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
 	cout.tie(NULL);
 
-	INT n;
-	cin >> n;
+	string input;
+	cin >> input;
 
-	INT ret = 0;
 
-	for (INT i = 3; i <= n; i += 3) {
-		for (INT j = 3; j <= n; j += 3) {
-			if (i + j < n) {
-				ret++;
+	for (INT i = 0; i < input.length(); i++) {
+		char curChar = input[i];
+		isWendy[i] = ((i + 1) % 3 == 0);
+	}
+
+	// r == 0
+	for (INT i = 0; i < input.length(); i++) {
+		if (i == 0) {
+			cout << "..";			
+		}
+		else {
+			cout << '.';
+		}
+
+		if (isWendy[i]) {
+			cout << '*';
+		}
+		else {
+			cout << '#';
+		}
+		cout << "..";		
+	}
+
+	cout << "\n";
+
+	// r == 1
+	for (INT i = 0; i < input.length(); i++) {
+		if (i == 0) {
+			cout << '.';
+		}
+
+		if (isWendy[i]) {
+			cout << "*.*";
+		}
+		else {
+			cout << "#.#";
+		}
+		cout << '.';		
+	}
+
+	cout << "\n";
+
+	// r == 2
+	for (INT i = 0; i < input.length(); i++) {
+		if (i == 0) {
+			if (isWendy[i]) {
+				cout << '*';
 			}
+			else {
+				cout << '#';
+			}
+		}
+
+		cout << '.';
+		cout << input[i];
+		cout << '.';
+
+		if (i == input.length() - 1 || !isWendy[i + 1]) {
+			if (isWendy[i]) {
+				cout << '*';
+			}
+			else {
+				cout << '#';
+			}
+		}
+		else {
+			cout << '*';
 		}
 	}
 
-	cout << ret;
+	cout << "\n";
+
+	// r == 3
+	for (INT i = 0; i < input.length(); i++) {
+		if (i == 0) {
+			cout << '.';
+		}
+
+		if (isWendy[i]) {
+			cout << "*.*";
+		}
+		else {
+			cout << "#.#";
+		}
+		cout << '.';
+	}
+
+	cout << "\n";
+
+	// r == 4
+	for (INT i = 0; i < input.length(); i++) {
+		if (i == 0) {
+			cout << "..";
+		}
+		else {
+			cout << '.';
+		}
+
+		if (isWendy[i]) {
+			cout << '*';
+		}
+		else {
+			cout << '#';
+		}
+		cout << "..";
+	}
 
 	return 0;
 }
