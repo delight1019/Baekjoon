@@ -20,123 +20,36 @@ typedef unsigned char ubyte;
 
 typedef int32 INT;
 
-bool isWendy[15];
-
 int main() {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
 	cout.tie(NULL);
 
-	string input;
-	cin >> input;
+	INT A, B;
+	cin >> A >> B;
 
-
-	for (INT i = 0; i < input.length(); i++) {
-		char curChar = input[i];
-		isWendy[i] = ((i + 1) % 3 == 0);
+	if (A <= B || A > 2 * B) {
+		cout << "NO";
+		return 0;
 	}
 
-	// r == 0
-	for (INT i = 0; i < input.length(); i++) {
-		if (i == 0) {
-			cout << "..";			
-		}
-		else {
-			cout << '.';
-		}
+	INT K = A - B;
 
-		if (isWendy[i]) {
-			cout << '*';
-		}
-		else {
-			cout << '#';
-		}
-		cout << "..";		
+	cout << "YES\n";
+	cout << K << "\n";
+
+	while (K > 1) {
+		cout << "aba\n";
+		A -= 2;
+		B -= 1;
+		K--;
 	}
 
-	cout << "\n";
-
-	// r == 1
-	for (INT i = 0; i < input.length(); i++) {
-		if (i == 0) {
-			cout << '.';
-		}
-
-		if (isWendy[i]) {
-			cout << "*.*";
-		}
-		else {
-			cout << "#.#";
-		}
-		cout << '.';		
+	for (INT b = 0; b < B; b++) {
+		cout << "ab";
 	}
 
-	cout << "\n";
-
-	// r == 2
-	for (INT i = 0; i < input.length(); i++) {
-		if (i == 0) {
-			if (isWendy[i]) {
-				cout << '*';
-			}
-			else {
-				cout << '#';
-			}
-		}
-
-		cout << '.';
-		cout << input[i];
-		cout << '.';
-
-		if (i == input.length() - 1 || !isWendy[i + 1]) {
-			if (isWendy[i]) {
-				cout << '*';
-			}
-			else {
-				cout << '#';
-			}
-		}
-		else {
-			cout << '*';
-		}
-	}
-
-	cout << "\n";
-
-	// r == 3
-	for (INT i = 0; i < input.length(); i++) {
-		if (i == 0) {
-			cout << '.';
-		}
-
-		if (isWendy[i]) {
-			cout << "*.*";
-		}
-		else {
-			cout << "#.#";
-		}
-		cout << '.';
-	}
-
-	cout << "\n";
-
-	// r == 4
-	for (INT i = 0; i < input.length(); i++) {
-		if (i == 0) {
-			cout << "..";
-		}
-		else {
-			cout << '.';
-		}
-
-		if (isWendy[i]) {
-			cout << '*';
-		}
-		else {
-			cout << '#';
-		}
-		cout << "..";
-	}
+	cout << "a";
 
 	return 0;
 }
