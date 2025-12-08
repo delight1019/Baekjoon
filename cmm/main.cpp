@@ -3,6 +3,7 @@
 #include <iostream>
 #include <cstring>
 #include <cmath>
+#include <queue>
 
 using namespace std;
 
@@ -25,31 +26,32 @@ int main() {
 	cin.tie(NULL);
 	cout.tie(NULL);
 
-	INT A, B;
-	cin >> A >> B;
+	INT N;
+	cin >> N;
 
-	if (A <= B || A > 2 * B) {
-		cout << "NO";
-		return 0;
+	priority_queue<INT> pq;
+
+	for (INT n = 0; n < N; n++) {
+		INT a;
+		cin >> a;
+
+		if (a == 0) {
+			if (pq.empty()) {
+				cout << -1 << "\n";
+			}
+			else {
+				cout << pq.top() << "\n";
+				pq.pop();
+			}
+		}
+		else {
+			for (INT i = 0; i < a; i++) {
+				INT t;
+				cin >> t;
+				pq.push(t);
+			}
+		}
 	}
-
-	INT K = A - B;
-
-	cout << "YES\n";
-	cout << K << "\n";
-
-	while (K > 1) {
-		cout << "aba\n";
-		A -= 2;
-		B -= 1;
-		K--;
-	}
-
-	for (INT b = 0; b < B; b++) {
-		cout << "ab";
-	}
-
-	cout << "a";
 
 	return 0;
 }
