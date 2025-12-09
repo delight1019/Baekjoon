@@ -26,31 +26,14 @@ int main() {
 	cin.tie(NULL);
 	cout.tie(NULL);
 
-	INT N;
-	cin >> N;
+	INT x;
+	cin >> x;
 
-	priority_queue<INT> pq;
-
-	for (INT n = 0; n < N; n++) {
-		INT a;
-		cin >> a;
-
-		if (a == 0) {
-			if (pq.empty()) {
-				cout << -1 << "\n";
-			}
-			else {
-				cout << pq.top() << "\n";
-				pq.pop();
-			}
-		}
-		else {
-			for (INT i = 0; i < a; i++) {
-				INT t;
-				cin >> t;
-				pq.push(t);
-			}
-		}
+	if (x % 7 == 2) {
+		cout << 1;
+	}
+	else {
+		cout << 0;
 	}
 
 	return 0;
