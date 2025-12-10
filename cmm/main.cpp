@@ -21,19 +21,28 @@ typedef unsigned char ubyte;
 
 typedef int32 INT;
 
+INT friends[1001];
+
 int main() {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
 	cout.tie(NULL);
 
-	INT x;
-	cin >> x;
+	memset(friends, 0, sizeof(friends));
 
-	if (x % 7 == 2) {
-		cout << 1;
+	INT N, M;
+	cin >> N >> M;
+
+	for (INT m = 0; m < M; m++) {
+		INT A, B;
+		cin >> A >> B;
+
+		friends[A]++;
+		friends[B]++;
 	}
-	else {
-		cout << 0;
+
+	for (INT n = 1; n <= N; n++) {
+		cout << friends[n] << "\n";
 	}
 
 	return 0;
