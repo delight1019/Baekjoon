@@ -28,22 +28,10 @@ int main() {
 	cin.tie(NULL);
 	cout.tie(NULL);
 
-	memset(friends, 0, sizeof(friends));
+	INT H, M;
+	cin >> H >> M;
 
-	INT N, M;
-	cin >> N >> M;
-
-	for (INT m = 0; m < M; m++) {
-		INT A, B;
-		cin >> A >> B;
-
-		friends[A]++;
-		friends[B]++;
-	}
-
-	for (INT n = 1; n <= N; n++) {
-		cout << friends[n] << "\n";
-	}
+	cout << H * 60 + M;
 
 	return 0;
 }
