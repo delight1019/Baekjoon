@@ -28,10 +28,10 @@ int main() {
 	cin.tie(NULL);
 	cout.tie(NULL);
 
-	INT H, M;
-	cin >> H >> M;
+	INT X, Y;
+	cin >> X >> Y;
 
-	cout << H * 60 + M;
+	cout << X + Y + 3;
 
 	return 0;
 }
