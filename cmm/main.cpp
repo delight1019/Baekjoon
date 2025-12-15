@@ -28,10 +28,15 @@ int main() {
 	cin.tie(NULL);
 	cout.tie(NULL);
 
-	INT X, Y;
-	cin >> X >> Y;
+	INT A, B, C;
+	cin >> A >> B >> C;
 
-	cout << X + Y + 3;
+	if (A + B + C <= 21) {
+		cout << 1;
+	}
+	else {
+		cout << 0;
+	}
 
 	return 0;
 }
