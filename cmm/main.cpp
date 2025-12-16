@@ -21,21 +21,18 @@ typedef unsigned char ubyte;
 
 typedef int32 INT;
 
-INT friends[1001];
-
 int main() {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
 	cout.tie(NULL);
 
-	INT A, B, C;
-	cin >> A >> B >> C;
+	INT N;
+	cin >> N;
 
-	if (A + B + C <= 21) {
-		cout << 1;
-	}
-	else {
-		cout << 0;
+	string korea = "LoveisKoreaUniversity"s;
+
+	for (INT n = 0; n < N; n++) {
+		cout << korea << " ";
 	}
 
 	return 0;
