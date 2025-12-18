@@ -4,6 +4,8 @@
 #include <cstring>
 #include <cmath>
 #include <queue>
+#include <map>
+#include <algorithm>
 
 using namespace std;
 
@@ -21,36 +23,65 @@ typedef unsigned char ubyte;
 
 typedef int32 INT;
 
-bool rooms[101];
+map<char, vector<char>> validMap {
+	make_pair('1', vector<char> {'4', '5'}),
+	make_pair('2', vector<char> {}),
+	make_pair('3', vector<char> {'4', '5'}),
+	make_pair('4', vector<char> {'2', '3'}),
+	make_pair('5', vector<char> {'8'}),
+	make_pair('6', vector<char> {'2', '3'}),
+	make_pair('7', vector<char> {'8'}),
+	make_pair('8', vector<char> {'6', '7'})
+};
 
 int main() {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
 	cout.tie(NULL);
 
-	INT T;
-	cin >> T;
+	INT testCase = 0;
 
-	for (INT testCase = 1; testCase <= T; testCase++) {
-		INT N;
-		cin >> N;
-		memset(rooms, false, sizeof(rooms));
+	while (++testCase) {
+		string input;
+		cin >> input;
 
-		for (INT i = 1; i <= N; i++) {
-			for (INT j = i; j <= N; j += i) {
-				rooms[j] = !rooms[j];
-			}
+		if (input == "0"s) break;
+
+		bool isValid = true;
+		char pre = input[0];
+
+		if (pre != '1') {
+			cout << testCase << ". " << "NOT" << "\n";
+			continue;
 		}
 
-		INT ret = 0;
+		for (INT i = 1; i < input.length(); i++) {
+			char cur = input[i];
+			vector<char>& valid = validMap[pre];
 
-		for (INT i = 1; i <= N; i++) {
-			if (rooms[i]) {
-				ret++;
+			if (find(valid.begin(), valid.end(), cur) == valid.end()) {
+				isValid = false;
 			}
+
+			if (cur == '2' && i != (input.length() - 1)) {
+				isValid = false;
+			}
+
+			pre = cur;
+
+			if (!isValid) break;
 		}
 
-		cout << ret << "\n";
+		if (pre != '2') {
+			isValid = false;
+		}
+
+		if (isValid) {
+			cout << testCase << ". " << "VALID" << "\n";
+		}
+		else {
+			cout << testCase << ". " << "NOT" << "\n";
+		}
 	}
 
 	return 0;
