@@ -39,50 +39,33 @@ int main() {
 	cin.tie(NULL);
 	cout.tie(NULL);
 
-	INT testCase = 0;
+	INT N, A, B, C;
+	
+	cin >> N >> A >> B >> C;
 
-	while (++testCase) {
-		string input;
-		cin >> input;
+	INT price = A;
+	INT cal = C;
+	vector<INT> DArr;
 
-		if (input == "0"s) break;
+	for (INT n = 0; n < N; n++) {
+		INT D;
+		cin >> D;
 
-		bool isValid = true;
-		char pre = input[0];
-
-		if (pre != '1') {
-			cout << testCase << ". " << "NOT" << "\n";
-			continue;
-		}
-
-		for (INT i = 1; i < input.length(); i++) {
-			char cur = input[i];
-			vector<char>& valid = validMap[pre];
-
-			if (find(valid.begin(), valid.end(), cur) == valid.end()) {
-				isValid = false;
-			}
-
-			if (cur == '2' && i != (input.length() - 1)) {
-				isValid = false;
-			}
-
-			pre = cur;
-
-			if (!isValid) break;
-		}
-
-		if (pre != '2') {
-			isValid = false;
-		}
-
-		if (isValid) {
-			cout << testCase << ". " << "VALID" << "\n";
-		}
-		else {
-			cout << testCase << ". " << "NOT" << "\n";
-		}
+		DArr.push_back(D);
 	}
+
+	sort(DArr.begin(), DArr.end(), greater<>());
+
+	for (INT n = 0; n < N; n++) {
+		if (price * DArr[n] <= cal * B) {
+			break;
+		}
+
+		price += B;
+		cal += DArr[n];
+	}
+
+	cout << cal / price;
 
 	return 0;
 }
