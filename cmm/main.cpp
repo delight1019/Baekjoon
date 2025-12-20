@@ -23,49 +23,70 @@ typedef unsigned char ubyte;
 
 typedef int32 INT;
 
-map<char, vector<char>> validMap {
-	make_pair('1', vector<char> {'4', '5'}),
-	make_pair('2', vector<char> {}),
-	make_pair('3', vector<char> {'4', '5'}),
-	make_pair('4', vector<char> {'2', '3'}),
-	make_pair('5', vector<char> {'8'}),
-	make_pair('6', vector<char> {'2', '3'}),
-	make_pair('7', vector<char> {'8'}),
-	make_pair('8', vector<char> {'6', '7'})
-};
+INT firstChars[26];
+INT curChars[26];
+INT diffs[26];
 
 int main() {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
 	cout.tie(NULL);
 
-	INT N, A, B, C;
-	
-	cin >> N >> A >> B >> C;
+	INT N;
+	cin >> N;
 
-	INT price = A;
-	INT cal = C;
-	vector<INT> DArr;
+	string first;
+	cin >> first;
 
-	for (INT n = 0; n < N; n++) {
-		INT D;
-		cin >> D;
+	memset(firstChars, 0, sizeof(firstChars));
 
-		DArr.push_back(D);
+	for (INT i = 0; i < first.length(); i++) {
+		firstChars[first[i] - 'A']++;
 	}
 
-	sort(DArr.begin(), DArr.end(), greater<>());
+	INT ret = 0;
 
-	for (INT n = 0; n < N; n++) {
-		if (price * DArr[n] <= cal * B) {
-			break;
+	for (INT n = 1; n < N; n++) {
+		memset(curChars, 0, sizeof(curChars));
+		memset(diffs, 0, sizeof(diffs));
+		string cur;
+		cin >> cur;
+
+		for (INT i = 0; i < cur.length(); i++) {
+			curChars[cur[i] - 'A']++;
 		}
 
-		price += B;
-		cal += DArr[n];
+		for (INT i = 0; i < 26; i++) {
+			diffs[i] = firstChars[i] - curChars[i];
+		}
+
+		bool isValid = true;
+		INT plus = 0;
+		INT minus = 0;
+
+		for (INT i = 0; i < 26; i++) {
+			if (diffs[i] == 0) continue;
+			if (diffs[i] >= 2 || diffs[i] <= -2) {
+				isValid = false;
+				break;
+			}
+			if (diffs[i] == 1) plus++;
+			if (diffs[i] == -1) minus++;
+		}
+
+		if (plus >= 2) {
+			isValid = false;
+		}
+		if (minus >= 2) {
+			isValid = false;
+		}
+
+		if (isValid) {
+			ret++;
+		}
 	}
 
-	cout << cal / price;
+	cout << ret;
 
 	return 0;
 }
