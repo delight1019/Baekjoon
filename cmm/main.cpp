@@ -1,11 +1,14 @@
 #pragma disable(4996)
 
 #include <iostream>
-#include <cstring>
+#include <climits>
 #include <cmath>
-#include <queue>
-#include <map>
+#include <cstring>
+#include <vector>
 #include <algorithm>
+#include <set>
+#include <map>
+#include <list>
 
 using namespace std;
 
@@ -20,73 +23,66 @@ typedef unsigned char ubyte;
 #define MAX(a, b) a < b ? b : a
 #define MIN(a, b) a < b ? a : b
 #define ABS(a) a < 0 ? -a : a
+#define DELETE_ARRAY(arr) if (arr) delete[] arr
+#define FOR(v, S, E) for (int v = S; v < E; v++)
 
 typedef int32 INT;
 
-INT firstChars[26];
-INT curChars[26];
-INT diffs[26];
+const INT MAX_VALUE = 200000;
+
+struct Kite {
+	INT A;
+	INT B;
+
+	bool operator < (const Kite& other) const {
+		if (A == other.A) {
+			return B < other.B;
+		}
+
+		return A < other.A;
+	}
+};
+
+vector<Kite> kites;
+INT cache[MAX_VALUE + 1];
+
+INT calculate(Kite prev, INT cur) {
+	if (cur == kites.size()) return 0;
+
+	INT& ret = cache[cur];
+
+	if (ret != -1) return ret;	
+
+	Kite curKite = kites[cur];
+
+	if (prev.A < curKite.A && prev.B < curKite.B) {
+		ret = calculate(kites[cur], cur + 1) + 1;
+	}	
+
+	ret = MAX(ret, calculate(prev, cur + 1));
+
+	return ret;
+}
 
 int main() {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
-	cout.tie(NULL);
+	cout.tie(NULL);	
 
 	INT N;
 	cin >> N;
 
-	string first;
-	cin >> first;
+	memset(cache, -1, sizeof(cache));
 
-	memset(firstChars, 0, sizeof(firstChars));
-
-	for (INT i = 0; i < first.length(); i++) {
-		firstChars[first[i] - 'A']++;
+	FOR(i, 0, N) {
+		Kite kite;
+		cin >> kite.A >> kite.B;
+		kites.push_back(kite);
 	}
 
-	INT ret = 0;
+	sort(kites.begin(), kites.end());
 
-	for (INT n = 1; n < N; n++) {
-		memset(curChars, 0, sizeof(curChars));
-		memset(diffs, 0, sizeof(diffs));
-		string cur;
-		cin >> cur;
-
-		for (INT i = 0; i < cur.length(); i++) {
-			curChars[cur[i] - 'A']++;
-		}
-
-		for (INT i = 0; i < 26; i++) {
-			diffs[i] = firstChars[i] - curChars[i];
-		}
-
-		bool isValid = true;
-		INT plus = 0;
-		INT minus = 0;
-
-		for (INT i = 0; i < 26; i++) {
-			if (diffs[i] == 0) continue;
-			if (diffs[i] >= 2 || diffs[i] <= -2) {
-				isValid = false;
-				break;
-			}
-			if (diffs[i] == 1) plus++;
-			if (diffs[i] == -1) minus++;
-		}
-
-		if (plus >= 2) {
-			isValid = false;
-		}
-		if (minus >= 2) {
-			isValid = false;
-		}
-
-		if (isValid) {
-			ret++;
-		}
-	}
-
-	cout << ret;
+	cout << calculate({ -1, -1 }, 0);
 
 	return 0;
 }

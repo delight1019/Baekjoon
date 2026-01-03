@@ -225,7 +225,16 @@
     <ClCompile Include="9527.cpp" />
     <ClCompile Include="9613.cpp" />
     <ClCompile Include="9711.cpp" />
+    <ClCompile Include="A.cpp" />
+    <ClCompile Include="abc121_b.cpp" />
+    <ClCompile Include="abc139_b.cpp" />
+    <ClCompile Include="abc156_c.cpp" />
+    <ClCompile Include="B.cpp" />
+    <ClCompile Include="C.cpp" />
+    <ClCompile Include="codefestival_2016_qualB_b.cpp" />
+    <ClCompile Include="D.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="sumitb2019_b.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

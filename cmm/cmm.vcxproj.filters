@@ -13,8 +13,14 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="solved">
+    <Filter Include="백준">
       <UniqueIdentifier>{ef3fd793-192d-414e-9c4a-a3d065f1669e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AtCoder">
+      <UniqueIdentifier>{5c19ef4c-d089-4dbb-aeff-9394c4e9b194}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AtCoder\abc439">
+      <UniqueIdentifier>{38e984a0-ce79-4294-a578-e6ab6a39d8d9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -22,298 +28,325 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="2166.cpp">
-      <Filter>solved</Filter>
+      <Filter>백준</Filter>
     </ClCompile>
     <ClCompile Include="2987.cpp">
-      <Filter>solved</Filter>
+      <Filter>백준</Filter>
     </ClCompile>
     <ClCompile Include="15655.cpp">
-      <Filter>solved</Filter>
+      <Filter>백준</Filter>
     </ClCompile>
     <ClCompile Include="2239.cpp">
-      <Filter>solved</Filter>
+      <Filter>백준</Filter>
     </ClCompile>
     <ClCompile Include="16234.cpp">
-      <Filter>solved</Filter>
+      <Filter>백준</Filter>
     </ClCompile>
     <ClCompile Include="2473.cpp">
-      <Filter>solved</Filter>
+      <Filter>백준</Filter>
     </ClCompile>
     <ClCompile Include="27172.cpp">
-      <Filter>solved</Filter>
+      <Filter>백준</Filter>
     </ClCompile>
     <ClCompile Include="7453.cpp">
-      <Filter>solved</Filter>
+      <Filter>백준</Filter>
     </ClCompile>
     <ClCompile Include="1562.cpp">
-      <Filter>solved</Filter>
+      <Filter>백준</Filter>
     </ClCompile>
     <ClCompile Include="2098.cpp">
-      <Filter>solved</Filter>
+      <Filter>백준</Filter>
     </ClCompile>
     <ClCompile Include="2294.cpp">
-      <Filter>solved</Filter>
+      <Filter>백준</Filter>
     </ClCompile>
     <ClCompile Include="15656.cpp">
-      <Filter>solved</Filter>
+      <Filter>백준</Filter>
     </ClCompile>
     <ClCompile Include="1926.cpp">
-      <Filter>solved</Filter>
+      <Filter>백준</Filter>
     </ClCompile>
     <ClCompile Include="9328.cpp">
-      <Filter>solved</Filter>
+      <Filter>백준</Filter>
     </ClCompile>
     <ClCompile Include="2342.cpp">
-      <Filter>solved</Filter>
+      <Filter>백준</Filter>
     </ClCompile>
     <ClCompile Include="16724.cpp">
-      <Filter>solved</Filter>
+      <Filter>백준</Filter>
     </ClCompile>
     <ClCompile Include="9527.cpp">
-      <Filter>solved</Filter>
+      <Filter>백준</Filter>
     </ClCompile>
     <ClCompile Include="10775.cpp">
-      <Filter>solved</Filter>
+      <Filter>백준</Filter>
     </ClCompile>
     <ClCompile Include="20303.cpp">
-      <Filter>solved</Filter>
+      <Filter>백준</Filter>
     </ClCompile>
     <ClCompile Include="9084.cpp">
-      <Filter>solved</Filter>
+      <Filter>백준</Filter>
     </ClCompile>
     <ClCompile Include="1509.cpp">
-      <Filter>solved</Filter>
+      <Filter>백준</Filter>
     </ClCompile>
     <ClCompile Include="28707.cpp">
-      <Filter>solved</Filter>
+      <Filter>백준</Filter>
     </ClCompile>
     <ClCompile Include="1446.cpp">
-      <Filter>solved</Filter>
+      <Filter>백준</Filter>
     </ClCompile>
     <ClCompile Include="1799.cpp">
-      <Filter>solved</Filter>
+      <Filter>백준</Filter>
     </ClCompile>
     <ClCompile Include="20944.cpp">
-      <Filter>solved</Filter>
+      <Filter>백준</Filter>
     </ClCompile>
     <ClCompile Include="9613.cpp">
-      <Filter>solved</Filter>
+      <Filter>백준</Filter>
     </ClCompile>
     <ClCompile Include="2774.cpp">
-      <Filter>solved</Filter>
+      <Filter>백준</Filter>
     </ClCompile>
     <ClCompile Include="1453.cpp">
-      <Filter>solved</Filter>
+      <Filter>백준</Filter>
     </ClCompile>
     <ClCompile Include="5586.cpp">
-      <Filter>solved</Filter>
+      <Filter>백준</Filter>
     </ClCompile>
     <ClCompile Include="2702.cpp">
-      <Filter>solved</Filter>
+      <Filter>백준</Filter>
     </ClCompile>
     <ClCompile Include="5656.cpp">
-      <Filter>solved</Filter>
+      <Filter>백준</Filter>
     </ClCompile>
     <ClCompile Include="2495.cpp">
-      <Filter>solved</Filter>
+      <Filter>백준</Filter>
     </ClCompile>
     <ClCompile Include="2484.cpp">
-      <Filter>solved</Filter>
+      <Filter>백준</Filter>
     </ClCompile>
     <ClCompile Include="2162.cpp">
-      <Filter>solved</Filter>
+      <Filter>백준</Filter>
     </ClCompile>
     <ClCompile Include="12850.cpp">
-      <Filter>solved</Filter>
+      <Filter>백준</Filter>
     </ClCompile>
     <ClCompile Include="21964.cpp">
-      <Filter>solved</Filter>
+      <Filter>백준</Filter>
     </ClCompile>
     <ClCompile Include="21544.cpp">
-      <Filter>solved</Filter>
+      <Filter>백준</Filter>
     </ClCompile>
     <ClCompile Include="2621.cpp">
-      <Filter>solved</Filter>
+      <Filter>백준</Filter>
     </ClCompile>
     <ClCompile Include="21275.cpp">
-      <Filter>solved</Filter>
+      <Filter>백준</Filter>
     </ClCompile>
     <ClCompile Include="21608.cpp">
-      <Filter>solved</Filter>
+      <Filter>백준</Filter>
     </ClCompile>
     <ClCompile Include="14725.cpp">
-      <Filter>solved</Filter>
+      <Filter>백준</Filter>
     </ClCompile>
     <ClCompile Include="15824.cpp">
-      <Filter>solved</Filter>
+      <Filter>백준</Filter>
     </ClCompile>
     <ClCompile Include="16565.cpp">
-      <Filter>solved</Filter>
+      <Filter>백준</Filter>
     </ClCompile>
     <ClCompile Include="11689.cpp">
-      <Filter>solved</Filter>
+      <Filter>백준</Filter>
     </ClCompile>
     <ClCompile Include="30007.cpp">
-      <Filter>solved</Filter>
+      <Filter>백준</Filter>
     </ClCompile>
     <ClCompile Include="19844.cpp">
-      <Filter>solved</Filter>
+      <Filter>백준</Filter>
     </ClCompile>
     <ClCompile Include="15815.cpp">
-      <Filter>solved</Filter>
+      <Filter>백준</Filter>
     </ClCompile>
     <ClCompile Include="13703.cpp">
-      <Filter>solved</Filter>
+      <Filter>백준</Filter>
     </ClCompile>
     <ClCompile Include="1267.cpp">
-      <Filter>solved</Filter>
+      <Filter>백준</Filter>
     </ClCompile>
     <ClCompile Include="2343.cpp">
-      <Filter>solved</Filter>
+      <Filter>백준</Filter>
     </ClCompile>
     <ClCompile Include="34217.cpp">
-      <Filter>solved</Filter>
+      <Filter>백준</Filter>
     </ClCompile>
     <ClCompile Include="1049.cpp">
-      <Filter>solved</Filter>
+      <Filter>백준</Filter>
     </ClCompile>
     <ClCompile Include="23826.cpp">
-      <Filter>solved</Filter>
+      <Filter>백준</Filter>
     </ClCompile>
     <ClCompile Include="29699.cpp">
-      <Filter>solved</Filter>
+      <Filter>백준</Filter>
     </ClCompile>
     <ClCompile Include="21921.cpp">
-      <Filter>solved</Filter>
+      <Filter>백준</Filter>
     </ClCompile>
     <ClCompile Include="9711.cpp">
-      <Filter>solved</Filter>
+      <Filter>백준</Filter>
     </ClCompile>
     <ClCompile Include="33848.cpp">
-      <Filter>solved</Filter>
+      <Filter>백준</Filter>
     </ClCompile>
     <ClCompile Include="24447.cpp">
-      <Filter>solved</Filter>
+      <Filter>백준</Filter>
     </ClCompile>
     <ClCompile Include="22994.cpp">
-      <Filter>solved</Filter>
+      <Filter>백준</Filter>
     </ClCompile>
     <ClCompile Include="14370.cpp">
-      <Filter>solved</Filter>
+      <Filter>백준</Filter>
     </ClCompile>
     <ClCompile Include="14369.cpp">
-      <Filter>solved</Filter>
+      <Filter>백준</Filter>
     </ClCompile>
     <ClCompile Include="14499.cpp">
-      <Filter>solved</Filter>
+      <Filter>백준</Filter>
     </ClCompile>
     <ClCompile Include="26145.cpp">
-      <Filter>solved</Filter>
+      <Filter>백준</Filter>
     </ClCompile>
     <ClCompile Include="30676.cpp">
-      <Filter>solved</Filter>
+      <Filter>백준</Filter>
     </ClCompile>
     <ClCompile Include="31668.cpp">
-      <Filter>solved</Filter>
+      <Filter>백준</Filter>
     </ClCompile>
     <ClCompile Include="3035.cpp">
-      <Filter>solved</Filter>
+      <Filter>백준</Filter>
     </ClCompile>
     <ClCompile Include="1212.cpp">
-      <Filter>solved</Filter>
+      <Filter>백준</Filter>
     </ClCompile>
     <ClCompile Include="10990.cpp">
-      <Filter>solved</Filter>
+      <Filter>백준</Filter>
     </ClCompile>
     <ClCompile Include="3085.cpp">
-      <Filter>solved</Filter>
+      <Filter>백준</Filter>
     </ClCompile>
     <ClCompile Include="16194.cpp">
-      <Filter>solved</Filter>
+      <Filter>백준</Filter>
     </ClCompile>
     <ClCompile Include="17425.cpp">
-      <Filter>solved</Filter>
+      <Filter>백준</Filter>
     </ClCompile>
     <ClCompile Include="6588.cpp">
-      <Filter>solved</Filter>
+      <Filter>백준</Filter>
     </ClCompile>
     <ClCompile Include="1748.cpp">
-      <Filter>solved</Filter>
+      <Filter>백준</Filter>
     </ClCompile>
     <ClCompile Include="1309.cpp">
-      <Filter>solved</Filter>
+      <Filter>백준</Filter>
     </ClCompile>
     <ClCompile Include="1946.cpp">
-      <Filter>solved</Filter>
+      <Filter>백준</Filter>
     </ClCompile>
     <ClCompile Include="11048.cpp">
-      <Filter>solved</Filter>
+      <Filter>백준</Filter>
     </ClCompile>
     <ClCompile Include="1890.cpp">
-      <Filter>solved</Filter>
+      <Filter>백준</Filter>
     </ClCompile>
     <ClCompile Include="6378.cpp">
-      <Filter>solved</Filter>
+      <Filter>백준</Filter>
     </ClCompile>
     <ClCompile Include="1244.cpp">
-      <Filter>solved</Filter>
+      <Filter>백준</Filter>
     </ClCompile>
     <ClCompile Include="17211.cpp">
-      <Filter>solved</Filter>
+      <Filter>백준</Filter>
     </ClCompile>
     <ClCompile Include="1075.cpp">
-      <Filter>solved</Filter>
+      <Filter>백준</Filter>
     </ClCompile>
     <ClCompile Include="32871.cpp">
-      <Filter>solved</Filter>
+      <Filter>백준</Filter>
     </ClCompile>
     <ClCompile Include="15645.cpp">
-      <Filter>solved</Filter>
+      <Filter>백준</Filter>
     </ClCompile>
     <ClCompile Include="11578.cpp">
-      <Filter>solved</Filter>
+      <Filter>백준</Filter>
     </ClCompile>
     <ClCompile Include="16561.cpp">
-      <Filter>solved</Filter>
+      <Filter>백준</Filter>
     </ClCompile>
     <ClCompile Include="3054.cpp">
-      <Filter>solved</Filter>
+      <Filter>백준</Filter>
     </ClCompile>
     <ClCompile Include="30020.cpp">
-      <Filter>solved</Filter>
+      <Filter>백준</Filter>
     </ClCompile>
     <ClCompile Include="14235.cpp">
-      <Filter>solved</Filter>
+      <Filter>백준</Filter>
     </ClCompile>
     <ClCompile Include="31611.cpp">
-      <Filter>solved</Filter>
+      <Filter>백준</Filter>
     </ClCompile>
     <ClCompile Include="10864.cpp">
-      <Filter>solved</Filter>
+      <Filter>백준</Filter>
     </ClCompile>
     <ClCompile Include="31614.cpp">
-      <Filter>solved</Filter>
+      <Filter>백준</Filter>
     </ClCompile>
     <ClCompile Include="31606.cpp">
-      <Filter>solved</Filter>
+      <Filter>백준</Filter>
     </ClCompile>
     <ClCompile Include="33170.cpp">
-      <Filter>solved</Filter>
+      <Filter>백준</Filter>
     </ClCompile>
     <ClCompile Include="32384.cpp">
-      <Filter>solved</Filter>
+      <Filter>백준</Filter>
     </ClCompile>
     <ClCompile Include="6359.cpp">
-      <Filter>solved</Filter>
+      <Filter>백준</Filter>
     </ClCompile>
     <ClCompile Include="4921.cpp">
-      <Filter>solved</Filter>
+      <Filter>백준</Filter>
     </ClCompile>
     <ClCompile Include="5545.cpp">
-      <Filter>solved</Filter>
+      <Filter>백준</Filter>
     </ClCompile>
     <ClCompile Include="2607.cpp">
-      <Filter>solved</Filter>
+      <Filter>백준</Filter>
+    </ClCompile>
+    <ClCompile Include="abc139_b.cpp">
+      <Filter>AtCoder</Filter>
+    </ClCompile>
+    <ClCompile Include="abc156_c.cpp">
+      <Filter>AtCoder</Filter>
+    </ClCompile>
+    <ClCompile Include="codefestival_2016_qualB_b.cpp">
+      <Filter>AtCoder</Filter>
+    </ClCompile>
+    <ClCompile Include="sumitb2019_b.cpp">
+      <Filter>AtCoder</Filter>
+    </ClCompile>
+    <ClCompile Include="abc121_b.cpp">
+      <Filter>AtCoder</Filter>
+    </ClCompile>
+    <ClCompile Include="A.cpp">
+      <Filter>AtCoder\abc439</Filter>
+    </ClCompile>
+    <ClCompile Include="B.cpp">
+      <Filter>AtCoder\abc439</Filter>
+    </ClCompile>
+    <ClCompile Include="C.cpp">
+      <Filter>AtCoder\abc439</Filter>
+    </ClCompile>
+    <ClCompile Include="D.cpp">
+      <Filter>AtCoder\abc439</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
