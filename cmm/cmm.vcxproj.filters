@@ -348,5 +348,17 @@
     <ClCompile Include="D.cpp">
       <Filter>AtCoder\abc439</Filter>
     </ClCompile>
+    <ClCompile Include="E.cpp">
+      <Filter>AtCoder\abc439</Filter>
+    </ClCompile>
+    <ClCompile Include="2631.cpp">
+      <Filter>백준</Filter>
+    </ClCompile>
+    <ClCompile Include="2550.cpp">
+      <Filter>백준</Filter>
+    </ClCompile>
+    <ClCompile Include="3066.cpp">
+      <Filter>백준</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

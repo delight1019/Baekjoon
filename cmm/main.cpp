@@ -28,61 +28,44 @@ typedef unsigned char ubyte;
 
 typedef int32 INT;
 
-const INT MAX_VALUE = 200000;
-
-struct Kite {
-	INT A;
-	INT B;
-
-	bool operator < (const Kite& other) const {
-		if (A == other.A) {
-			return B < other.B;
-		}
-
-		return A < other.A;
-	}
-};
-
-vector<Kite> kites;
-INT cache[MAX_VALUE + 1];
-
-INT calculate(Kite prev, INT cur) {
-	if (cur == kites.size()) return 0;
-
-	INT& ret = cache[cur];
-
-	if (ret != -1) return ret;	
-
-	Kite curKite = kites[cur];
-
-	if (prev.A < curKite.A && prev.B < curKite.B) {
-		ret = calculate(kites[cur], cur + 1) + 1;
-	}	
-
-	ret = MAX(ret, calculate(prev, cur + 1));
-
-	return ret;
-}
-
 int main() {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
-	cout.tie(NULL);	
+	cout.tie(NULL);
 
 	INT N;
 	cin >> N;
 
-	memset(cache, -1, sizeof(cache));
-
+	vector<INT> trains;
 	FOR(i, 0, N) {
-		Kite kite;
-		cin >> kite.A >> kite.B;
-		kites.push_back(kite);
+		INT temp;
+		cin >> temp;
+		trains.push_back(temp);
 	}
 
-	sort(kites.begin(), kites.end());
+	vector<INT> lis;
 
-	cout << calculate({ -1, -1 }, 0);
+	for (auto& train : trains) {
+		auto lb = lower_bound(lis.begin(), lis.end(), train);
 
+		if (lb == cache.end()) {
+			cache.push_back(train);
+		}
+		else if (lb == cache.begin()) {
+			cache.push_front(train);
+		}
+		else {
+			if (*lb == cache.back()) {
+				*lb = train;
+			}
+			else {
+				lb--;
+				*lb = train;
+			}
+		}
+	}
+
+	cout << cache.size();
+	
 	return 0;
 }
